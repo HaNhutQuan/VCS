@@ -11,6 +11,10 @@ class Database {
 
         try {
             $this->conn = new PDO("mysql:host={$this->host};dbname={$this->db_name}", $this->db_user, $this->db_pass);
-        }catch( )
+        }catch(PDOException $err) {
+            echo $err->getMessage();
+        }
+
+        return $this->conn;
     }
 }
