@@ -1,0 +1,24 @@
+version: '3.8'
+services:
+  web-service:
+    build: ./src
+    restart: unless-stopped
+    ports:
+      - "1200:80"
+    volumes:
+      - ./src:/var/www/html
+    depends_on:
+      - db-service
+  db-service:
+    image: mysql:8.0
+    command: --default-authentication-plugin=mysql_native_password
+    expose:
+      - 3306
+    environment:
+      - MYSQL_HOSTNAME=db-service
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=vcs
+      - MYSQL_USER=admin
+      - MYSQL_PASSWORD=password
+    volumes:
+      - ./db/:/docker-entrypoint-initdb.d
