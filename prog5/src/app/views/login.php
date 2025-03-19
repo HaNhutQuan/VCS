@@ -10,11 +10,17 @@
 </head>
 
 <body>
-    
- 
+    <?php if (!empty($errMessage)) : ?>
+        <div class="position-fixed top-0 end-0 p-3" style="z-index: 1050;">
+        <div id="toastAlert" class="alert alert-warning alert-dismissible fade show" role="alert">
+            <span id="toastMessage"><?= $errMessage; ?></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    </div>
+    <?php endif; ?>
     <div class="login-container">
-    <img src="<?php echo base_url("image/logo.svg"); ?>" alt="Logo" width="100">
-        <form method="POST" class="needs-validation" novalidate>
+        <img src="<?php echo base_url("image/logo.svg"); ?>" alt="Logo" width="100">
+        <form method="POST" class="needs-validation" novalidate action="login" autocomplete="off">
             <div class="mb-3 text-start">
                 <label class="mb-2 text-muted" for="email">Tên tài khoản</label>
                 <input id="email" type="email" class="form-control" name="email" required autofocus>

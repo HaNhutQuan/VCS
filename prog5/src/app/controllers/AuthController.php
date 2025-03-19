@@ -1,7 +1,9 @@
 <?php
 
-class AuthController {
-    public function getLogin() {
+class AuthController
+{
+    public function getLogin()
+    {
         $data = [
             "title" => "Đăng nhập"
         ];
@@ -9,18 +11,28 @@ class AuthController {
         return render("login.php", $data);
     }
 
-    public function postLogin() {
-        return;
+    public function postLogin()
+    {
+        $data = [
+            "title" => "Đăng nhập",
+            "errMessage" => ""
+        ];
+
+        $data["errMessage"] = "Thông tin đăng nhập hoặc mật khẩu sai";
+
+        return render("login.php", $data);
     }
 
-    public function getRegister() {
+    public function getRegister()
+    {
         $data = [
             "title" => "Đăng ký"
         ];
         return render("register.php", $data);
     }
 
-    public function postRegister() {
+    public function postRegister()
+    {
         return;
     }
 }
