@@ -2,7 +2,11 @@
 
 class AuthController {
     public function getLogin() {
-        return require_once __DIR__ . "/../views/login/index.php";
+        $data = [
+            "title" => "Đăng nhập"
+        ];
+
+        return render("login.php", $data);
     }
 
     public function postLogin() {
@@ -10,7 +14,10 @@ class AuthController {
     }
 
     public function getRegister() {
-        return;
+        $data = [
+            "title" => "Đăng ký"
+        ];
+        return render("register.php", $data);
     }
 
     public function postRegister() {

@@ -12,5 +12,16 @@ function base_path($path="") {
 }
 
 function view_path($path="") {
+    
     return base_path("app/views/" . ltrim($path, '/'));
+}
+
+function render($view = "", $data = []) {
+    extract($data);
+    
+    ob_start();
+
+    require view_path($view);
+    
+    return ob_get_clean();
 }
