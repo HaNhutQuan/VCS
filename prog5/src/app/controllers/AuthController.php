@@ -7,8 +7,6 @@ class AuthController
         $data = [
             "title" => "Đăng nhập"
         ];
-        $user = new User();
-        echo $user->getInfo("teacher1")["full_name"];
         return render("login.php", $data);
     }
 
@@ -27,11 +25,17 @@ class AuthController
             return render("login.php", $data);
         }
 
-        $user = new User();
-        $check = $user->login($_POST["username"], $_POST["password"]);
-
-        if($check) {
-            header("Location: /register");
+        $userModal = new User();
+        $user = $userModal->getUserByUsername($username);
+        
+        if($user && password_verify($password, $user->password)) {
+            $_SESSION['user'] = [
+                'id' => $user->user_id,
+                'username' => $user->username,
+                'role' => $user->role
+            ];
+            //var_dump($_SESSION);
+            header("Location: " . ($user->role === "teacher" ? "/teacher/home" : "/student/home"));
             exit();
         }
 
@@ -45,11 +49,25 @@ class AuthController
         $data = [
             "title" => "Đăng ký"
         ];
+        $user = new User();
+        $user->register();
         return render("register.php", $data);
     }
 
     public function postRegister()
     {
         return;
+    }
+
+    public function getLogout() {
+        session_destroy();
+        header("Location: /login");
+        exit();
+    }
+    public function notFound() {
+        $data = [
+            "title" => "404"
+        ];
+        return render("404.php", $data);
     }
 }

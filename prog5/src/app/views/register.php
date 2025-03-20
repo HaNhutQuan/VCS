@@ -35,7 +35,7 @@
                     Vui lòng nhập mật khẩu.
                 </div>
             </div>
-            <button type="submit" class="btn btn-custom">Đăng ký</button>
+            <button type="submit" class="btn btn-primary">Đăng ký</button>
 
             <div class="text-center mt-3 text-muted">
                 Bạn đã có tài khoản? <a href="<?php echo base_url(''); ?>">Đăng nhập ngay</a>
@@ -52,7 +52,7 @@
                         <p class="text-start">Chức năng đăng ký bị giới hạn. Nếu bạn cần tài khoản, hãy liên hệ quản trị viên để được hỗ trợ.</p>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Đóng</button>
+                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Đóng</button>
                     </div>
                 </div>
             </div>

@@ -3,7 +3,8 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    background: #f8f9fa;
+    /* background: #f8f9fa; */
+    background: linear-gradient(135deg, #f5f7fa 0%, #e4e8eb 100%);
 }
 
 .login-container {
@@ -31,7 +32,7 @@ body {
     box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
 }
 
-.btn-custom {
+.btn-primary {
     background: #007bff;
     border: none;
     border-radius: 8px;
@@ -42,17 +43,8 @@ body {
     transition: 0.3s;
 }
 
-.btn-custom:hover {
-    background: linear-gradient(to right, #0056b3, #003f7f);
-}
-
 .text-muted a {
     text-decoration: none;
     color: #007bff;
     transition: color 0.3s;
-}
-
-.text-muted a:hover {
-    color: #0056b3;
-    text-decoration: underline;
 }

@@ -1,6 +1,6 @@
 <?php
-
 session_start();
+
 
 require_once __DIR__ . "/../config/config.php";
 require_once __DIR__ . "/../app/models/Database.php";
@@ -9,7 +9,8 @@ require_once __DIR__ . "/helpers.php";
 spl_autoload_register(function ($class_name) {
     $paths = [
         __DIR__ . "/controllers/",
-        __DIR__ . "/models/"
+        __DIR__ . "/models/",
+        __DIR__ . "/middleware/"
     ];
 
     foreach ($paths as $path) {

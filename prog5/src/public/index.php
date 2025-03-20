@@ -15,5 +15,6 @@ if(isset($routes[$method][$request])) {
     echo ($controllerInstance->$action());
 }else {
     http_response_code(404);
-    die("<h1>404 - NOT FOUND</h1>");
+    header("Location: /404");
+    exit();
 }

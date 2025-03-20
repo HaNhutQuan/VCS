@@ -33,7 +33,7 @@ class User {
     private function getInfoFromDB($username) {
         $query = "SELECT * FROM users WHERE username = :username";
         $stmt = $this->conn->prepare($query);
-        $stmt->bindParam(":username", $username, PDO::PARAM_STR);
+        $stmt->bindParam(":username", $username);
         $stmt->execute();
 
         $user = $stmt->fetch(PDO::FETCH_OBJ);
@@ -49,7 +49,7 @@ class User {
 
     public function getInfo($username) {
         $this->getInfoFromDB($username);
-        
+
         return [
             "user_id" => $this->user_id,
             "username" => $this->username,
@@ -62,36 +62,32 @@ class User {
         ];
     }
 
-    public function findUsername($username = "") {
-        $query = "SELECT username FROM $this->table WHERE username= :username";
-        $stmt = $this->conn->prepare($query);
-
-        $stmt->bindParam(":username", $username);
-        $stmt->execute();
-
-        if($stmt->rowCount() > 0)
-            return true;
-        return false;
-
-    }
-
-    public function login($username = "", $password = "") {
+    
+    public function getUserByUsername($username) {
         $query = "SELECT * FROM $this->table WHERE username = :username";
         
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(":username", $username);
         $stmt->execute();
 
-        $user = $stmt->fetch(PDO::FETCH_OBJ);
-        
-        if(!$user)
-            return false;
-        
-        $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
-        if(password_verify($user->password, $hashedPassword)) {
-            return false;
-        }
+        return $stmt->fetch(PDO::FETCH_OBJ);
+    }
 
-        return true;
+
+    public function register() {
+        // $sql = "INSERT INTO users (username, password, full_name, email, phone, avatar, role) 
+        //     VALUES (:username, :password, :full_name, :email, :phone, :avatar, :role)";
+
+        // $stmt = $this->conn->prepare($sql);
+        // $data = [
+        //     ':username'   => 'user1',
+        //     ':password'   => password_hash('1', PASSWORD_BCRYPT), 
+        //     ':full_name'  => 'test',
+        //     ':email'      => 'student1@gmail.com',
+        //     ':phone'      => '0765400898',
+        //     ':avatar'     => 'http://example.com',
+        //     ':role'       => 'student'
+        // ];
+        // $stmt->execute($data);
     }
 }

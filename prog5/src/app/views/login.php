@@ -41,7 +41,7 @@
                 <a href="#" class="text-muted">Quên mật khẩu?</a>
             </div>
 
-            <button type="submit" class="btn btn-custom">Đăng nhập</button>
+            <button type="submit" class="btn btn-primary">Đăng nhập</button>
 
             <div class="text-center mt-3 text-muted">
                 Bạn chưa có tài khoản? <a href="<?php echo base_url('register'); ?>">Đăng ký ngay</a>
