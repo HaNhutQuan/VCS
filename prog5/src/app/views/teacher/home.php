@@ -6,14 +6,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <title>Teacher Dashboard</title>
+    <title><?= $title; ?></title>
 </head>
 
 <body>
     <header class="p-3 mb-3 border-bottom">
         <div class="container">
             <div class="d-flex flex-wrap align-items-center justify-content-between">
-                <img src="src/public/image/logo.svg" width="40" height="40">
+                <img src="<?php echo base_url('image/logo.svg'); ?>" width="40" height="40">
                 <div class="dropdown text-end">
                     <a href="#" class="d-block link-body-emphasis text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
                         <img src="https://github.com/mdo.png" alt="avatar" width="32" height="32" class="rounded-circle">
@@ -21,14 +21,16 @@
                     <ul class="dropdown-menu text-small">
                         <li><a class="dropdown-item" href="#">Hồ sơ cá nhân</a></li>
                         <li><a class="dropdown-item" href="#">Cài đặt</a></li>
-                        <li><hr class="dropdown-divider"></li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
                         <li><a class="dropdown-item text-danger" href="#">Đăng xuất</a></li>
                     </ul>
                 </div>
             </div>
         </div>
     </header>
-    
+
     <div class="container py-4">
         <div class="row g-3 mb-4">
             <div class="col-12 col-md-6">
@@ -50,7 +52,7 @@
                 </div>
             </div>
         </div>
-        
+
         <div class="row g-3">
             <div class="col-12 col-lg-8">
                 <div class="card border-0 shadow-lg">
@@ -86,12 +88,10 @@
                     </table>
                 </div>
             </div>
-            
+
             <div class="col-12 col-lg-4">
                 <div class="card border-0 shadow">
-                    <div class="card-header bg-white border-0">
-                        <h5 class="mb-0">Quick Actions</h5>
-                    </div>
+
                     <div class="card-body d-grid gap-2">
                         <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#assignTaskModal">
                             <i class="fas fa-plus me-2"></i>Giao bài tập
@@ -104,8 +104,8 @@
             </div>
         </div>
     </div>
-    
-    <!-- Modal Giao Bài Tập -->
+
+
     <div class="modal fade" id="assignTaskModal" tabindex="-1" aria-labelledby="assignTaskModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -129,8 +129,8 @@
             </div>
         </div>
     </div>
-    
-    <!-- Modal Quản Lý Sinh Viên -->
+
+
     <div class="modal fade" id="manageStudentsModal" tabindex="-1" aria-labelledby="manageStudentsModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -139,12 +139,37 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <p>Danh sách sinh viên sẽ được hiển thị ở đây.</p>
+                    <table class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Họ và Tên</th>
+                                <th>Email</th>
+                                <th>Hành động</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php
+                            $index = 0;
+                            foreach ($students as $student) {
+                                echo "<tr>";
+                                echo "<td>{$index}</td>"; // Hiển thị số thứ tự
+                                echo "<td>{$student['full_name']}</td>";
+                                echo "<td>{$student['email']}</td>";
+                                echo "<td><button class='btn btn-danger btn-sm' onclick='deleteStudent({$row['id']})'>Xóa</button></td>";
+                                echo "</tr>";
+                                $index++;
+                            }
+                            ?>
+                        </tbody>
+                    </table>
+
                 </div>
             </div>
         </div>
     </div>
-    
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>

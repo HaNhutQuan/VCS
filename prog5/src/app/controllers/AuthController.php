@@ -28,9 +28,9 @@ class AuthController
         $userModal = new User();
         $user = $userModal->getUserByUsername($username);
         
-        if($user && password_verify($password, $user->password)) {
+        if($user && password_verify($password, $user->password_hash)) {
             $_SESSION['user'] = [
-                'id' => $user->user_id,
+                'id' => $user->id,
                 'username' => $user->username,
                 'role' => $user->role
             ];

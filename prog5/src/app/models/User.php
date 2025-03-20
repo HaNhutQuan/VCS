@@ -4,9 +4,9 @@ class User {
     private $conn;
     private $table = "users";
 
-    private $user_id;
+    private $id;
     private $username;
-    private $password;
+    private $password_hash;
     private $full_name;
     private $email;
     private $phone;
@@ -18,10 +18,10 @@ class User {
         $this->conn = Database::getInstance()->getConnection();
     }
     
-    private function setInfo($user_id, $username, $password, $full_name, $email, $phone, $avatar, $role, $created_at) {
-        $this->user_id = $user_id;
+    private function setInfo($id, $username, $password_hash, $full_name, $email, $phone, $avatar, $role, $created_at) {
+        $this->id = $id;
         $this->username = $username;
-        $this->password = $password;
+        $this->password_hash = $password_hash;
         $this->full_name = $full_name;
         $this->email = $email;
         $this->phone = $phone;
@@ -40,7 +40,7 @@ class User {
 
         if ($user) {
             
-            $this->setInfo($user->user_id, $user->username, "", $user->full_name, $user->email, $user->phone, $user->avatar, $user->role, $user->created_at);
+            $this->setInfo($user->id, $user->username, "", $user->full_name, $user->email, $user->phone, $user->avatar, $user->role, $user->created_at);
             return true;
         } else {
             return false;
@@ -51,7 +51,7 @@ class User {
         $this->getInfoFromDB($username);
 
         return [
-            "user_id" => $this->user_id,
+            "id" => $this->id,
             "username" => $this->username,
             "full_name" => $this->full_name,
             "email" => $this->email,
@@ -73,6 +73,14 @@ class User {
         return $stmt->fetch(PDO::FETCH_OBJ);
     }
 
+    public function getUsersByRole($role) {
+        $query = "SELECT * FROM $this->table WHERE role = :role";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(":role", $role);
+        $stmt->execute();
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 
     public function register() {
         // $sql = "INSERT INTO users (username, password, full_name, email, phone, avatar, role) 
@@ -89,5 +97,26 @@ class User {
         //     ':role'       => 'student'
         // ];
         // $stmt->execute($data);
+        $users = [
+            ['teacher1', '123456a@A', 'Teacher One', 'teacher1@example.com', '0123456789', 'teacher', 'Class A'],
+            ['teacher2', '123456a@A', 'Teacher Two', 'teacher2@example.com', '0987654321', 'teacher', 'Class B'],
+            ['student1', '123456a@A', 'Student One', 'student1@example.com', '0111222333', 'student', 'Class A'],
+            ['student2', '123456a@A', 'Student Two', 'student2@example.com', '0222333444', 'student', 'Class B'],
+        ];
+        
+        $stmt = $this->conn->prepare("INSERT INTO users (username, password_hash, full_name, email, phone, role, class_name) 
+                           VALUES (:username, :password, :full_name, :email, :phone, :role, :class_name)");
+        foreach ($users as $user) {
+            $stmt->execute([
+                'username' => $user[0],
+                'password' => password_hash($user[1], PASSWORD_BCRYPT),
+                'full_name' => $user[2],
+                'email' => $user[3],
+                'phone' => $user[4],
+                'role' => $user[5],
+                'class_name' => $user[6]
+            ]);
+        }
+        
     }
 }
