@@ -156,7 +156,7 @@
                                 echo "<td>{$index}</td>"; // Hiển thị số thứ tự
                                 echo "<td>{$student['full_name']}</td>";
                                 echo "<td>{$student['email']}</td>";
-                                echo "<td><button class='btn btn-danger btn-sm' onclick='deleteStudent({$row['id']})'>Xóa</button></td>";
+                                echo "<td><a href='/student/profile?id={$student['id']}' class='btn btn-primary btn-sm'>Chi tiết</a></td>";
                                 echo "</tr>";
                                 $index++;
                             }
