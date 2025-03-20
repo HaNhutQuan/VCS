@@ -52,7 +52,7 @@
                         <p class="text-start">Chức năng đăng ký bị giới hạn. Nếu bạn cần tài khoản, hãy liên hệ quản trị viên để được hỗ trợ.</p>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">OK</button>
+                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Đóng</button>
                     </div>
                 </div>
             </div>

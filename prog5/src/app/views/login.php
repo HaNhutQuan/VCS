@@ -23,7 +23,7 @@
         <form method="POST" class="needs-validation" novalidate action="login" autocomplete="off">
             <div class="mb-3 text-start">
                 <label class="mb-2 text-muted" for="email">Tên tài khoản</label>
-                <input id="email" type="email" class="form-control" name="email" required autofocus>
+                <input id="email" type="email" class="form-control" name="username" required autofocus>
                 <div class="invalid-feedback">
                     Vui lòng nhập tên tài khoản.
                 </div>

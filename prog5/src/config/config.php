@@ -1,6 +1,6 @@
 <?php
 
-const config = [
+return $config = [
     "database"  => [
         "host"      => "db-service",
         "database"  => "vcs",

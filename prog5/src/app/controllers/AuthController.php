@@ -7,7 +7,8 @@ class AuthController
         $data = [
             "title" => "Đăng nhập"
         ];
-
+        $user = new User();
+        echo $user->getInfo("teacher1")["full_name"];
         return render("login.php", $data);
     }
 
@@ -17,6 +18,22 @@ class AuthController
             "title" => "Đăng nhập",
             "errMessage" => ""
         ];
+
+        $username = $_POST["username"];
+        $password = $_POST["password"];
+
+        if(empty($username) || empty($password)) {
+            $data["errMessage"] = "Vui lòng nhập đầy đủ thông tin đăng nhập";
+            return render("login.php", $data);
+        }
+
+        $user = new User();
+        $check = $user->login($_POST["username"], $_POST["password"]);
+
+        if($check) {
+            header("Location: /register");
+            exit();
+        }
 
         $data["errMessage"] = "Thông tin đăng nhập hoặc mật khẩu sai";
 
