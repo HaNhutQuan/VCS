@@ -62,6 +62,15 @@ class User {
         ];
     }
 
+    public function getUserById($id) {
+        $query = "SELECT * FROM $this->table WHERE id = :id";
+        
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(":id", $id);
+        $stmt->execute();
+
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
     
     public function getUserByUsername($username) {
         $query = "SELECT * FROM $this->table WHERE username = :username";
@@ -83,40 +92,7 @@ class User {
     }
 
     public function register() {
-        // $sql = "INSERT INTO users (username, password, full_name, email, phone, avatar, role) 
-        //     VALUES (:username, :password, :full_name, :email, :phone, :avatar, :role)";
 
-        // $stmt = $this->conn->prepare($sql);
-        // $data = [
-        //     ':username'   => 'user1',
-        //     ':password'   => password_hash('1', PASSWORD_BCRYPT), 
-        //     ':full_name'  => 'test',
-        //     ':email'      => 'student1@gmail.com',
-        //     ':phone'      => '0765400898',
-        //     ':avatar'     => 'http://example.com',
-        //     ':role'       => 'student'
-        // ];
-        // $stmt->execute($data);
-        $users = [
-            ['teacher1', '123456a@A', 'Teacher One', 'teacher1@example.com', '0123456789', 'teacher', 'Class A'],
-            ['teacher2', '123456a@A', 'Teacher Two', 'teacher2@example.com', '0987654321', 'teacher', 'Class B'],
-            ['student1', '123456a@A', 'Student One', 'student1@example.com', '0111222333', 'student', 'Class A'],
-            ['student2', '123456a@A', 'Student Two', 'student2@example.com', '0222333444', 'student', 'Class B'],
-        ];
-        
-        $stmt = $this->conn->prepare("INSERT INTO users (username, password_hash, full_name, email, phone, role, class_name) 
-                           VALUES (:username, :password, :full_name, :email, :phone, :role, :class_name)");
-        foreach ($users as $user) {
-            $stmt->execute([
-                'username' => $user[0],
-                'password' => password_hash($user[1], PASSWORD_BCRYPT),
-                'full_name' => $user[2],
-                'email' => $user[3],
-                'phone' => $user[4],
-                'role' => $user[5],
-                'class_name' => $user[6]
-            ]);
-        }
         
     }
 }

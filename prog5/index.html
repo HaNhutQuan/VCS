@@ -34,23 +34,23 @@
             <ul class="list-unstyled profile-info">
               <li>
                 <i class="fas fa-user"></i> <strong>Tài khoản:</strong>
-                <?php echo $student['username']; ?>
+                <?php echo $user['username']; ?>
               </li>
               <li>
                 <i class="fas fa-user-edit"></i> <strong>Họ tên:</strong>
-                <?php echo $student['full_name']; ?>
+                <?php echo $user['full_name']; ?>
               </li>
               <li>
                 <i class="fas fa-envelope"></i> <strong>Email:</strong>
-                <?php echo $student['email']; ?>
+                <?php echo $user['email']; ?>
               </li>
               <li>
                 <i class="fas fa-phone"></i> <strong>SĐT:</strong>
-                <?php echo $student['phone'] ?? "Chưa cập nhật"; ?>
+                <?php echo $user['phone'] ?? "Chưa cập nhật"; ?>
               </li>
               <li>
                 <i class="fas fa-user-graduate"></i> <strong>Vai trò:</strong>
-                <?php echo ucfirst($student['role']); ?>
+                <?php echo ucfirst($user['role']); ?>
               </li>
             </ul>
           </div>
@@ -61,7 +61,7 @@
           <i class="fas fa-arrow-left"></i> Quay lại
         </a>
         <a
-          href="/student/delete?id=<?php echo $student['id']; ?>"
+          href="/student/delete?id=<?php echo $user['id']; ?>"
           class="btn btn-danger btn-custom"
           onclick="return confirm('Bạn có chắc muốn xóa sinh viên này không?');"
         >
@@ -105,11 +105,11 @@
             ></button>
           </div>
           <div class="modal-body">
-            <!-- Trường ẩn chứa id -->
+           
             <input
               type="hidden"
               name="id"
-              value="<?php echo $student['id']; ?>"
+              value="<?php echo $user['id']; ?>"
             />
             <div class="mb-3">
               <label for="username" class="form-label">Tài khoản</label>
@@ -118,7 +118,7 @@
                 class="form-control"
                 id="username"
                 name="username"
-                value="<?php echo $student['username']; ?>"
+                value="<?php echo $user['username']; ?>"
                 readonly
               />
             </div>
@@ -129,7 +129,7 @@
                 class="form-control"
                 id="full_name"
                 name="full_name"
-                value="<?php echo $student['full_name']; ?>"
+                value="<?php echo $user['full_name']; ?>"
               />
             </div>
             <div class="mb-3">
@@ -139,7 +139,7 @@
                 class="form-control"
                 id="email"
                 name="email"
-                value="<?php echo $student['email']; ?>"
+                value="<?php echo $user['email']; ?>"
               />
             </div>
             <div class="mb-3">
@@ -149,7 +149,7 @@
                 class="form-control"
                 id="phone"
                 name="phone"
-                value="<?php echo $student['phone']; ?>"
+                value="<?php echo $user['phone']; ?>"
               />
             </div>
             <div class="mb-3">

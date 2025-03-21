@@ -38,7 +38,7 @@
                     <div class="card-body">
                         <i class="fas fa-user-graduate fa-3x text-primary mb-3"></i>
                         <h5 class="card-title">Tổng số sinh viên</h5>
-                        <p class="card-text fs-4 fw-bold">500</p>
+                        <p class="card-text fs-4 fw-bold"><?php echo count($students); ?></p>
                     </div>
                 </div>
             </div>
@@ -132,42 +132,43 @@
 
 
     <div class="modal fade" id="manageStudentsModal" tabindex="-1" aria-labelledby="manageStudentsModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="manageStudentsModalLabel">Quản Lý Sinh Viên</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <table class="table table-bordered table-striped">
-                        <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>Họ và Tên</th>
-                                <th>Email</th>
-                                <th>Hành động</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php
-                            $index = 0;
-                            foreach ($students as $student) {
-                                echo "<tr>";
-                                echo "<td>{$index}</td>"; // Hiển thị số thứ tự
-                                echo "<td>{$student['full_name']}</td>";
-                                echo "<td>{$student['email']}</td>";
-                                echo "<td><a href='/student/profile?id={$student['id']}' class='btn btn-primary btn-sm'>Chi tiết</a></td>";
-                                echo "</tr>";
-                                $index++;
-                            }
-                            ?>
-                        </tbody>
-                    </table>
-
-                </div>
+    <div class="modal-dialog modal-fullscreen">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="manageStudentsModalLabel">Quản Lý Sinh Viên</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body overflow-auto">
+                <table class="table  table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Họ và Tên</th>
+                            <th>Email</th>
+                            <th>Số điện thoại</th>
+                            <th>Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php
+                        $index = 1;
+                        foreach ($students as $student) {
+                            echo "<tr>";
+                            echo "<td>{$index}</td>";
+                            echo "<td>{$student['full_name']}</td>";
+                            echo "<td>{$student['email']}</td>";
+                            echo "<td>{$student['phone']}</td>";
+                            echo "<td><a href='/profile?id={$student['id']}' class='btn btn-success btn-sm'>Chi tiết</a></td>";
+                            echo "</tr>";
+                            $index++;
+                        }
+                        ?>
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
+</div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>

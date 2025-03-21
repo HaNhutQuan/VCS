@@ -7,6 +7,7 @@ class AuthController
         $data = [
             "title" => "Đăng nhập"
         ];
+
         return render("login.php", $data);
     }
 
@@ -27,14 +28,14 @@ class AuthController
 
         $userModal = new User();
         $user = $userModal->getUserByUsername($username);
-        
+
         if($user && password_verify($password, $user->password_hash)) {
             $_SESSION['user'] = [
                 'id' => $user->id,
                 'username' => $user->username,
                 'role' => $user->role
             ];
-            //var_dump($_SESSION);
+           
             header("Location: " . ($user->role === "teacher" ? "/teacher/home" : "/student/home"));
             exit();
         }

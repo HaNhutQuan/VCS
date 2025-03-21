@@ -8,7 +8,8 @@ return [
         "/logout"       => "AuthController@getLogout",
         "/student/home" => "StudentController@home",
         "/teacher/home" => "TeacherController@home",
-        "/404"          => "AuthController@notFound"
+        "/404"          => "AuthController@notFound",
+        "/profile"      => "UserController@getProfile"
     ],
     "POST"  => [
         "/login"        => "AuthController@postLogin",
