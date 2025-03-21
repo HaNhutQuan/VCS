@@ -18,7 +18,7 @@
     <div class="profile-card">
         <div class="profile-header">
             <?php $role = $user['role'] === 'teacher' ? 'giáo viên' : 'sinh viên'; ?>
-            <h2>Thông tin <?= $role; ?></h2>
+            <h2 class="fw-bold">Thông tin <?= $role; ?></h2>
         </div>
         <div class="profile-body">
             <div class="row align-items-center">
@@ -71,7 +71,7 @@
         ?>
 
         <div class="profile-footer">
-            <a href="/teacher/home" class="btn btn-secondary btn-custom">
+            <a href="javascript:history.go(-1)" class="btn btn-secondary btn-custom">
                 <i class="fas fa-arrow-left"></i> Quay lại
             </a>
             <?php if ($isTeacher && $isStudent): ?>

@@ -12,11 +12,17 @@ class UserController {
         $userModal = new User();
         $user = $userModal->getUserById($userId);
         
+        if(!$user) {
+            http_response_code(404);
+            header("Location: /404");
+            exit();
+        }
+        
         $data = [
             "title" => "Thông tin cá nhân",
             "user"  => $user
         ];
-        //var_dump($data);
+        
         return render("profile.php", $data);
     }
 }
