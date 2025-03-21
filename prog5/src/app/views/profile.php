@@ -8,13 +8,46 @@
     <link
         href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
         rel="stylesheet" />
-    <script
-        src="https://kit.fontawesome.com/a076d05399.js"
-        crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha384-3TTOkDqU0UygpTuAjrsxU3dSYbAGIoXt2L7/g7K+d8ag04z4kEl+4Ub5q69T9aD2" crossorigin="anonymous" />
     <link rel="stylesheet" href="<?php echo base_url("css/profile.css"); ?>">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Poppins:wght@600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        h1,
+        h2,
+        h3 {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+        }
+
+        button {
+            font-family: 'Poppins', sans-serif;
+        }
+    </style>
 </head>
 
 <body>
+    <?php if (!empty($errMessage)) : ?>
+        <div class="position-fixed top-0 end-0 p-3" style="z-index: 1050;">
+            <div id="toastAlert" class="alert alert-warning alert-dismissible fade show" role="alert">
+                <span id="toastMessage"><?= htmlspecialchars($errMessage); ?></span>
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        </div>
+    <?php endif; ?>
+    <?php if (!empty($successMessage)) : ?>
+        <div class="position-fixed top-0 end-0 p-3" style="z-index: 1050;">
+            <div id="toastAlert" class="alert alert-success alert-dismissible fade show shadow-lg" role="alert">
+                <i class="fas fa-check-circle me-2"></i>
+                <span id="toastMessage"><?= htmlspecialchars($successMessage); ?></span>
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        </div>
+    <?php endif; ?>
+
     <div class="profile-card">
         <div class="profile-header">
             <?php $role = $user['role'] === 'teacher' ? 'giáo viên' : 'sinh viên'; ?>
@@ -102,12 +135,12 @@
         aria-hidden="true">
         <div class="modal-dialog">
             <form
-                action="/student/update"
+                action="/profile"
                 method="POST"
                 class="modal-content"
                 enctype="multipart/form-data">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="editModalLabel">
+                    <h5 class="modal-title fw-bold" id="editModalLabel">
                         Chỉnh sửa thông tin sinh viên
                     </h5>
                     <button
@@ -121,16 +154,28 @@
                     <input
                         type="hidden"
                         name="id"
-                        value="<?php echo $user['id']; ?>" />
+                        value="<?php echo htmlspecialchars($user['id']); ?>" />
                     <div class="mb-3">
                         <label for="username" class="form-label">Tài khoản</label>
                         <input
                             type="text"
                             class="form-control"
                             id="username"
-                            name="username"
                             value="<?php echo $user['username']; ?>"
-                            readonly />
+                            <?php if ($isStudent): ?>
+                            readonly disabled
+                            <?php else: ?>
+                            name="username"
+                            <?php endif; ?> />
+                    </div>
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Mật khẩu</label>
+                        <input
+                            type="password"
+                            class="form-control"
+                            id="password"
+                            name="password"
+                            value="" />
                     </div>
                     <div class="mb-3">
                         <label for="full_name" class="form-label">Họ tên</label>
@@ -138,8 +183,12 @@
                             type="text"
                             class="form-control"
                             id="full_name"
+                            value="<?php echo htmlspecialchars($user['full_name']); ?>"
+                            <?php if ($isStudent): ?>
+                            readonly disabled
+                            <?php else: ?>
                             name="full_name"
-                            value="<?php echo $user['full_name']; ?>" />
+                            <?php endif; ?> />
                     </div>
                     <div class="mb-3">
                         <label for="email" class="form-label">Email</label>
@@ -148,7 +197,7 @@
                             class="form-control"
                             id="email"
                             name="email"
-                            value="<?php echo $user['email']; ?>" />
+                            value="<?php echo htmlspecialchars($user['email']); ?>" />
                     </div>
                     <div class="mb-3">
                         <label for="phone" class="form-label">Số điện thoại</label>
@@ -157,16 +206,18 @@
                             class="form-control"
                             id="phone"
                             name="phone"
-                            value="<?php echo $user['phone']; ?>" />
+                            value="<?php echo htmlspecialchars($user['phone']); ?>" />
                     </div>
-                    <div class="mb-3">
-                        <label for="avatar" class="form-label">Upload Avatar</label>
-                        <input
-                            type="file"
-                            class="form-control"
-                            id="avatar"
-                            name="avatar" />
-                    </div>
+                    <?php if ($isStudent) : ?>
+                        <div class="mb-3">
+                            <label for="avatar" class="form-label">Upload Avatar</label>
+                            <input
+                                type="file"
+                                class="form-control"
+                                id="avatar"
+                                name="avatar_url" />
+                        </div>
+                    <?php endif; ?>
                 </div>
                 <div class="modal-footer">
                     <button

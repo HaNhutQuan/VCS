@@ -25,3 +25,7 @@ function render($view = "", $data = []) {
     
     return ob_get_clean();
 }
+
+function uploadFile() {
+
+}

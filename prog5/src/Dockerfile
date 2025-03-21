@@ -2,20 +2,31 @@ FROM php:8.0-apache
 
 WORKDIR /var/www/html
 
-RUN docker-php-ext-install mysqli pdo pdo_mysql && \
-    docker-php-ext-enable mysqli pdo pdo_mysql
+RUN apt-get update && apt-get install -y \
+    libpng-dev \
+    libjpeg-dev \
+    libfreetype6-dev \
+    unzip \
+    && docker-php-ext-configure gd \
+    && docker-php-ext-install gd mysqli pdo pdo_mysql \
+    && docker-php-ext-enable mysqli pdo pdo_mysql
+
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 COPY . .
 
-RUN mv 000-default.conf /etc/apache2/sites-available/000-default.conf
+RUN composer require cloudinary/cloudinary_php
 
-RUN a2enmod rewrite && service apache2 restart
+COPY 000-default.conf /etc/apache2/sites-available/000-default.conf
 
-RUN chown -R root:www-data /var/www/html && \
-    chmod 755 /var/www/html && \
-    find . -type f -exec chmod 640 {} \; && \
-    find . -type d -exec chmod 750 {} \; && \
-    chmod +t -R /var/www/html/
+RUN a2enmod rewrite
+
+
+RUN chown -R www-data:www-data /var/www/html && \
+    chmod -R 755 /var/www/html && \
+    find /var/www/html -type f -exec chmod 644 {} \; && \
+    find /var/www/html -type d -exec chmod 755 {} \;
 
 EXPOSE 80
 
+CMD ["apache2-foreground"]

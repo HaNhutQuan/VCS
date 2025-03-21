@@ -1,181 +1,46 @@
 <!DOCTYPE html>
 <html lang="vi">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Thông Tin Sinh Viên</title>
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-    />
-    <script
-      src="https://kit.fontawesome.com/a076d05399.js"
-      crossorigin="anonymous"
-    ></script>
-    <link rel="stylesheet" href="/src/public/css/profile.css">
-  </head>
-  <body>
-    <div class="profile-card">
-      <div class="profile-header">
-        <h2>Thông tin sinh viên</h2>
-      </div>
-      <div class="profile-body">
-        <div class="row align-items-center">
-          
-          <div class="col-md-4 text-center mb-3 mb-md-0">
-            <img
-              src="data:image/jpeg;base64,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"
-              alt="Avatar"
-              class="profile-img"
-            />
-          </div>
-          
-          <div class="col-md-8">
-            <ul class="list-unstyled profile-info">
-              <li>
-                <i class="fas fa-user"></i> <strong>Tài khoản:</strong>
-                <?php echo $user['username']; ?>
-              </li>
-              <li>
-                <i class="fas fa-user-edit"></i> <strong>Họ tên:</strong>
-                <?php echo $user['full_name']; ?>
-              </li>
-              <li>
-                <i class="fas fa-envelope"></i> <strong>Email:</strong>
-                <?php echo $user['email']; ?>
-              </li>
-              <li>
-                <i class="fas fa-phone"></i> <strong>SĐT:</strong>
-                <?php echo $user['phone'] ?? "Chưa cập nhật"; ?>
-              </li>
-              <li>
-                <i class="fas fa-user-graduate"></i> <strong>Vai trò:</strong>
-                <?php echo ucfirst($user['role']); ?>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </div>
-      <div class="profile-footer">
-        <a href="/teacher/home" class="btn btn-secondary btn-custom">
-          <i class="fas fa-arrow-left"></i> Quay lại
-        </a>
-        <a
-          href="/student/delete?id=<?php echo $user['id']; ?>"
-          class="btn btn-danger btn-custom"
-          onclick="return confirm('Bạn có chắc muốn xóa sinh viên này không?');"
-        >
-          <i class="fas fa-trash"></i> Xóa
-        </a>
-        
-        <button
-          class="btn btn-success btn-custom"
-          data-bs-toggle="modal"
-          data-bs-target="#editModal"
-        >
-          <i class="fas fa-edit"></i> Chỉnh sửa
-        </button>
-      </div>
-    </div>
 
-   
-    <div
-      class="modal fade"
-      id="editModal"
-      tabindex="-1"
-      aria-labelledby="editModalLabel"
-      aria-hidden="true"
-    >
-      <div class="modal-dialog">
-        <form
-          action="/student/update"
-          method="POST"
-          class="modal-content"
-          enctype="multipart/form-data"
-        >
-          <div class="modal-header">
-            <h5 class="modal-title" id="editModalLabel">
-              Chỉnh sửa thông tin sinh viên
-            </h5>
-            <button
-              type="button"
-              class="btn-close"
-              data-bs-dismiss="modal"
-              aria-label="Đóng"
-            ></button>
-          </div>
-          <div class="modal-body">
-           
-            <input
-              type="hidden"
-              name="id"
-              value="<?php echo $user['id']; ?>"
-            />
-            <div class="mb-3">
-              <label for="username" class="form-label">Tài khoản</label>
-              <input
-                type="text"
-                class="form-control"
-                id="username"
-                name="username"
-                value="<?php echo $user['username']; ?>"
-                readonly
-              />
-            </div>
-            <div class="mb-3">
-              <label for="full_name" class="form-label">Họ tên</label>
-              <input
-                type="text"
-                class="form-control"
-                id="full_name"
-                name="full_name"
-                value="<?php echo $user['full_name']; ?>"
-              />
-            </div>
-            <div class="mb-3">
-              <label for="email" class="form-label">Email</label>
-              <input
-                type="email"
-                class="form-control"
-                id="email"
-                name="email"
-                value="<?php echo $user['email']; ?>"
-              />
-            </div>
-            <div class="mb-3">
-              <label for="phone" class="form-label">Số điện thoại</label>
-              <input
-                type="text"
-                class="form-control"
-                id="phone"
-                name="phone"
-                value="<?php echo $user['phone']; ?>"
-              />
-            </div>
-            <div class="mb-3">
-              <label for="avatar" class="form-label">Upload Avatar</label>
-              <input
-                type="file"
-                class="form-control"
-                id="avatar"
-                name="avatar"
-              />
-            </div>
-          </div>
-          <div class="modal-footer">
-            <button
-              type="button"
-              class="btn btn-secondary"
-              data-bs-dismiss="modal"
-            >
-              Đóng
-            </button>
-            <button type="submit" class="btn btn-primary">Lưu thay đổi</button>
-          </div>
-        </form>
-      </div>
-    </div>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title><?= $title; ?></title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="<?php echo base_url('css/style.css'); ?>">
+</head>
+<body>
+<form method="POST" action="/update-profile">
+  <div class="mb-3">
+      <label class="form-label"><i class="fas fa-user"></i> Tài khoản</label>
+      <input type="text" class="form-control bg-light" value="<?= htmlspecialchars($user->username) ?>" readonly>
+  </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-  </body>
-</html>
+  <div class="mb-3">
+      <label class="form-label"><i class="fas fa-user-edit"></i> Họ tên</label>
+      <input type="text" class="form-control bg-light" disabled value="<?= htmlspecialchars($user->full_name) ?>" readonly>
+  </div>
+
+  <div class="mb-3">
+      <label class="form-label"><i class="fas fa-envelope"></i> Email</label>
+      <input type="email" class="form-control bg-light" value="<?= htmlspecialchars($user->email) ?>" readonly>
+  </div>
+
+  <div class="mb-3">
+      <label class="form-label"><i class="fas fa-phone"></i> SĐT</label>
+      <input type="text" class="form-control bg-light" value="<?= htmlspecialchars($user->phone) ?>" readonly>
+  </div>
+
+  <div class="mb-3">
+      <label class="form-label"><i class="fas fa-user-graduate"></i> Vai trò</label>
+      <input type="text" class="form-control bg-light" value="<?= ucfirst(htmlspecialchars($user->role)) ?>" readonly>
+  </div>
+
+  <button type="button" id="editBtn" class="btn btn-primary">
+      <i class="fas fa-edit"></i> Chỉnh sửa
+  </button>
+  <button type="submit" id="saveBtn" class="btn btn-success d-none">
+      <i class="fas fa-save"></i> Lưu
+  </button>
+</form>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
