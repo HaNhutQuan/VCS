@@ -1,6 +1,6 @@
 <?php
 
-return $config = [
+return [
     "database"  => [
         "host"      => "db-service",
         "database"  => "vcs",
@@ -12,7 +12,7 @@ return $config = [
     ],
     "cloudinary" => [
         "cloud_name" => "diimgquir",
-        "api_key"    => "317857715318896",
-        "api_secret" => "pNINx1d30wOpZlxEv1YklPvCyfo"
+        "api_key"    => "465976211781486",
+        "api_secret" => "_saOonEpr28eLpGGoql0kcF_vX0"
     ]
 ];

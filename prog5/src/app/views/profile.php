@@ -208,14 +208,14 @@
                             name="phone"
                             value="<?php echo htmlspecialchars($user['phone']); ?>" />
                     </div>
-                    <?php if ($isStudent) : ?>
+                    <?php if ($isStudent && $isSelf) : ?>
                         <div class="mb-3">
                             <label for="avatar" class="form-label">Upload Avatar</label>
                             <input
                                 type="file"
                                 class="form-control"
                                 id="avatar"
-                                name="avatar_url" />
+                                name="avatar" />
                         </div>
                     <?php endif; ?>
                 </div>

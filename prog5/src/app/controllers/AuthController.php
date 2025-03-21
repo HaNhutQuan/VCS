@@ -28,7 +28,7 @@ class AuthController
 
         $userModal = new User();
         $user = $userModal->getUserByUsername($username);
-
+        
         if($user && password_verify($password, $user->password_hash)) {
             $_SESSION['user'] = [
                 'id' => $user->id,
@@ -52,7 +52,7 @@ class AuthController
             "title" => "Đăng ký"
         ];
         $user = new User();
-        $user->register();
+        //$user->register();
         return render("register.php", $data);
     }
 

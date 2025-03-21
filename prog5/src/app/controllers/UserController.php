@@ -66,7 +66,8 @@ class UserController
         }
 
         // Handle upload file
-        var_dump($_FILES['avatar_url']);
+        
+        var_dump(uploadFile($_FILES["avatar"]["tmp_name"]));
         die();
 
         $userModal = new User();
