@@ -8,34 +8,20 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <title><?= $title; ?></title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Poppins:wght@600&display=swap" rel="stylesheet">
-    <style>
-        body {
-            font-family: 'Inter', sans-serif;
-        }
-
-        h1,
-        h2,
-        h3 {
-            font-family: 'Poppins', sans-serif;
-            font-weight: 600;
-        }
-
-        button {
-            font-family: 'Poppins', sans-serif;
-        }
-    </style>
+    <link rel="stylesheet" href="<?php echo base_url('css/index.css'); ?>">
 </head>
 
 <body>
-    <header class="p-3 mb-3 border-bottom">
+    <header class="p-3 mb-3 border-bottom bg-white shadow-sm">
         <div class="container">
             <div class="d-flex flex-wrap align-items-center justify-content-between">
                 <img src="<?php echo base_url('image/logo.svg'); ?>" width="40" height="40">
+
                 <div class="dropdown text-end">
-                    <a href="#" class="d-block link-body-emphasis text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                        <img src="<?= $_SESSION['user']['avatar_url']; ?>" alt="avatar" width="32" height="32" class="rounded-circle">
+                    <a href="profileDropdown" class="d-block link-body-emphasis text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                        <img src="<?= $_SESSION['user']['avatar_url']; ?>" alt="avatar" width="40" height="40" class="rounded-circle border border-2">
                     </a>
-                    <ul class="dropdown-menu text-small">
+                    <ul class="dropdown-menu dropdown-menu-end text-small" aria-labelledby="profileDropdown">
                         <li><a class="dropdown-item" href="/profile?id=<?= $_SESSION['user']['id'] ?>">Hồ sơ cá nhân</a></li>
                         <li><a class="dropdown-item" href="#">Cài đặt</a></li>
                         <li>
@@ -47,7 +33,24 @@
             </div>
         </div>
     </header>
+    <?php if (!empty($errMessage)) : ?>
+        <div class="position-fixed top-0 end-0 p-3" style="z-index: 1050;">
+            <div id="toastAlert" class="alert alert-warning alert-dismissible fade show" role="alert">
+                <span id="toastMessage"><?= htmlspecialchars($errMessage); ?></span>
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        </div>
+    <?php endif; ?>
 
+    <?php if (!empty($successMessage)) : ?>
+        <div class="position-fixed top-0 end-0 p-3" style="z-index: 1050;">
+            <div id="toastAlert" class="alert alert-success alert-dismissible fade show shadow-lg" role="alert">
+                <i class="fas fa-check-circle me-2"></i>
+                <span id="toastMessage"><?= htmlspecialchars($successMessage); ?></span>
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        </div>
+    <?php endif; ?>
     <div class="container py-4">
         <div class="row g-3 mb-4">
             <div class="col-12 col-md-6">
@@ -64,7 +67,7 @@
                     <div class="card-body">
                         <i class="fas fa-book fa-3x text-warning mb-3"></i>
                         <h5 class="card-title">Bài tập đang giao</h5>
-                        <p class="card-text fs-4 fw-bold">20</p>
+                        <p class="card-text fs-4 fw-bold"><?php echo count($assignments); ?></p>
                     </div>
                 </div>
             </div>
@@ -85,23 +88,20 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>1</td>
-                                <td>Toán - Hình học</td>
-                                <td>
-                                    <button class="btn btn-danger btn-sm">Xóa</button>
-                                    <button class="btn btn-success btn-sm">Mở</button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>2</td>
-                                <td>Văn - Phân tích thơ</td>
-                                <td>
-                                    <button class="btn btn-danger btn-sm">Xóa</button>
-                                    <button class="btn btn-success btn-sm">Mở</button>
-                                </td>
-                            </tr>
+                            <?php
+                            $index = 1;
+                            foreach ($assignments as $assignment) : ?>
+                                <tr>
+                                    <td><?= $index++; ?></td>
+                                    <td><?= htmlspecialchars($assignment['title']); ?></td>
+                                    <td>
+                                        <button class="btn btn-danger btn-sm">Xóa</button>
+                                        <button class="btn btn-success btn-sm">Mở</button>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
                         </tbody>
+
                     </table>
                 </div>
             </div>
@@ -131,21 +131,38 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form>
+                    <form action="/assignments/create" method="POST" enctype="multipart/form-data">
+                        <!-- Hidden Teacher ID -->
+                        <input type="hidden" name="teacher_id" value="<?= $_SESSION['user']['id']; ?>">
+
+                        <!-- Tên bài tập -->
                         <div class="mb-3">
-                            <label class="form-label">Tên bài tập</label>
-                            <input type="text" class="form-control">
+                            <label for="title" class="form-label">Tên bài tập</label>
+                            <input type="text" class="form-control" id="title" name="title" required placeholder="Nhập tên bài tập">
                         </div>
+
+                        <!-- Mô tả -->
                         <div class="mb-3">
-                            <label class="form-label">Mô tả</label>
-                            <textarea class="form-control"></textarea>
+                            <label for="description" class="form-label">Mô tả</label>
+                            <textarea class="form-control" id="description" name="description" rows="3" placeholder="Nhập mô tả chi tiết"></textarea>
                         </div>
-                        <button type="submit" class="btn btn-primary">Giao bài</button>
+
+                        <!-- Upload file -->
+                        <div class="mb-3">
+                            <label for="file" class="form-label">Tài liệu đính kèm</label>
+                            <input type="file" class="form-control" id="file" name="file">
+                        </div>
+
+                        <!-- Nút Giao bài -->
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary">Giao bài</button>
+                        </div>
                     </form>
                 </div>
             </div>
         </div>
     </div>
+
 
 
     <div class="modal fade" id="manageStudentsModal" tabindex="-1" aria-labelledby="manageStudentsModalLabel" aria-hidden="true">

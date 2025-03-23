@@ -9,24 +9,9 @@
         href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
         rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha384-3TTOkDqU0UygpTuAjrsxU3dSYbAGIoXt2L7/g7K+d8ag04z4kEl+4Ub5q69T9aD2" crossorigin="anonymous" />
-    <link rel="stylesheet" href="<?php echo base_url("css/profile.css"); ?>">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Poppins:wght@600&display=swap" rel="stylesheet">
-    <style>
-        body {
-            font-family: 'Inter', sans-serif;
-        }
-
-        h1,
-        h2,
-        h3 {
-            font-family: 'Poppins', sans-serif;
-            font-weight: 600;
-        }
-
-        button {
-            font-family: 'Poppins', sans-serif;
-        }
-    </style>
+    <link rel="stylesheet" href="<?php echo base_url("css/profile.css"); ?>">
+    <link rel="stylesheet" href="<?php echo base_url('css/index.css'); ?>">
 </head>
 
 <body>
@@ -38,6 +23,7 @@
             </div>
         </div>
     <?php endif; ?>
+
     <?php if (!empty($successMessage)) : ?>
         <div class="position-fixed top-0 end-0 p-3" style="z-index: 1050;">
             <div id="toastAlert" class="alert alert-success alert-dismissible fade show shadow-lg" role="alert">
@@ -104,14 +90,11 @@
         ?>
 
         <div class="profile-footer">
-            <a href="javascript:history.go(-1)" class="btn btn-secondary btn-custom">
+            <a href="<?= $_SESSION['user']['role']; ?>/home" class="btn btn-secondary btn-custom">
                 <i class="fas fa-arrow-left"></i> Quay lại
             </a>
             <?php if ($isTeacher && $isStudent): ?>
-                <a
-                    href="/student/delete?id=<?php echo $user['id']; ?>"
-                    class="btn btn-danger btn-custom"
-                    onclick="return confirm('Bạn có chắc muốn xóa sinh viên này không?');">
+                <a href="#" class="btn btn-danger btn-custom" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal">
                     <i class="fas fa-trash"></i> Xóa
                 </a>
             <?php endif; ?>
@@ -229,6 +212,27 @@
                     <button type="submit" class="btn btn-primary">Lưu thay đổi</button>
                 </div>
             </form>
+        </div>
+    </div>
+    <div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="confirmDeleteLabel">Xác nhận xóa</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Bạn có chắc chắn muốn xóa sinh viên này không?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                    <!-- Form Xóa Dùng POST -->
+                    <form method="POST" action="/deleteUser">
+                        <input type="hidden" name="id" value="<?= $user['id']; ?>">
+                        <button type="submit" class="btn btn-danger">Xóa</button>
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

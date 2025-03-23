@@ -13,9 +13,9 @@ class User
 
     public function getUserById($id)
     {
-        $query = "SELECT * FROM $this->table WHERE id = :id";
+        $sql = "SELECT * FROM $this->table WHERE id = :id";
 
-        $stmt = $this->conn->prepare($query);
+        $stmt = $this->conn->prepare($sql);
         $stmt->bindParam(":id", $id);
         $stmt->execute();
 
@@ -24,9 +24,9 @@ class User
 
     public function getUserByUsername($username)
     {
-        $query = "SELECT * FROM $this->table WHERE username = :username";
+        $sql = "SELECT * FROM $this->table WHERE username = :username";
 
-        $stmt = $this->conn->prepare($query);
+        $stmt = $this->conn->prepare($sql);
         $stmt->bindParam(":username", $username);
         $stmt->execute();
 
@@ -35,8 +35,8 @@ class User
 
     public function getUsersByRole($role)
     {
-        $query = "SELECT * FROM $this->table WHERE role = :role";
-        $stmt = $this->conn->prepare($query);
+        $sql = "SELECT * FROM $this->table WHERE role = :role";
+        $stmt = $this->conn->prepare($sql);
         $stmt->bindParam(":role", $role);
         $stmt->execute();
 
@@ -46,11 +46,23 @@ class User
     public function updateUserById($id, $data)
     {
         $updateFields = implode(", ", array_map(fn($key) => "$key = :$key", array_keys($data)));
-        $query = "UPDATE users SET $updateFields WHERE id = :id";
+        $sql = "UPDATE users SET $updateFields WHERE id = :id";
 
         $data["id"] = $id;
-        $stmt = $this->conn->prepare($query);
+        $stmt = $this->conn->prepare($sql);
 
         return $stmt->execute($data);
+    }
+
+    public function deleteUserById($id) {
+        $sql = "DELETE FROM users WHERE id = :id";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bindParam(':id', $id);
+        $stmt->execute();
+        if ($stmt->rowCount() > 0) {
+            return true;
+        } 
+        return false;
+
     }
 }

@@ -36,11 +36,7 @@ class UserController
             exit();
         }
         
-        $message = [
-            "title"           => "Thông tin cá nhân",
-            "errMessage"      => "",
-            "successMessage"  => ""   
-        ];
+        $message = ["title" => "Thông tin cá nhân",];
 
         $allowedFields = [
             "teacher" => ["username", "password", "full_name", "email", "phone"],
@@ -77,10 +73,33 @@ class UserController
 
         if (!$isSuccess) {
             $message['errMessage'] = "Cập nhật thông tin thất bại.";
+        } else {
+            $message['successMessage'] = "Cập nhật thông tin thành công.";
+        }
+
+        return $this->getProfile($userId, $message);
+    }
+
+    public function getDeleteUser() {
+        AuthMiddleware::checkAuth("teacher");
+        $userId =filter_input(INPUT_POST, 'id', FILTER_VALIDATE_INT);
+
+        if (!$userId) {
+            header("Location: /{$_SESSION['user']['role']}/home");
+            exit();
+        }
+        
+        $userModal = new User();
+        $isSuccess = $userModal->deleteUserById($userId);
+        $message = ["title" => "Thông tin cá nhân"];
+
+       if (!$isSuccess) {
+            $message['errMessage'] = "Xóa sinh viên thất bại";
             return $this->getProfile($userId, $message);
         }
 
-        $message['successMessage'] = "Cập nhật thông tin thành công.";
-        return $this->getProfile($userId, $message);
+        // Return the teacher's profile
+        $message['successMessage'] = "Xóa sinh viên thành công.";
+        return $this->getProfile($_SESSION['user']['id'], $message);
     }
 }

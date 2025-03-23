@@ -13,12 +13,14 @@ return [
         
 
         "/profile"      => "UserController@getProfile"
+        
     ],
     "POST"  => [
         "/login"        => "AuthController@postLogin",
         "/register"     => "AuthController@postRegister",
 
 
-        "/profile"      => "UserController@updateProfile"
+        "/profile"      => "UserController@updateProfile",
+        "/deleteUser"   => "UserController@getDeleteUser"
     ] 
 ];
