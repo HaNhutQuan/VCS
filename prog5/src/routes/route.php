@@ -2,25 +2,38 @@
 
 return [
     "GET"   => [
-        "/"             => "AuthController@getLogin",
-        "/login"        => "AuthController@getLogin",
-        "/register"     => "AuthController@getRegister",
-        "/logout"       => "AuthController@getLogout",
-        "/404"          => "AuthController@notFound",
+        "/"                     => "AuthController@getLogin",
+        "/login"                => "AuthController@getLogin",
+        "/register"             => "AuthController@getRegister",
+        "/logout"               => "AuthController@getLogout",
+        "/404"                  => "AuthController@notFound",
 
-        "/student/home" => "StudentController@home",
-        "/teacher/home" => "TeacherController@home",
-        
 
-        "/profile"      => "UserController@getProfile"
+
+        "/student/home"         => "StudentController@home",
+
+        "/teacher/home"         => "TeacherController@home",
+        "/teacher/assignment"   => "TeacherController@getAssignment",
+        "/teacher/deleteAssignment" => "TeacherController@deleteAssignment",
+        "/teacher/getSubmission"    => "TeacherController@getSubmission",
         
+        "/profile"              => "UserController@getProfile",
+        "/deleteUser"       => "UserController@getDeleteUser"
+
+
+
     ],
     "POST"  => [
-        "/login"        => "AuthController@postLogin",
-        "/register"     => "AuthController@postRegister",
+        "/login"            => "AuthController@postLogin",
+        "/register"         => "AuthController@postRegister",
+
+        "/student/submit"   => "StudentController@postSubmissions",
+
+        "/profile"          => "UserController@updateProfile",
 
 
-        "/profile"      => "UserController@updateProfile",
-        "/deleteUser"   => "UserController@getDeleteUser"
-    ] 
+        "/createAssignment" => "TeacherController@createAssignment",
+        "/updateAssignment" => "TeacherController@updateAssignment"
+
+    ]
 ];

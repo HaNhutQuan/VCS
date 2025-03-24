@@ -2,12 +2,12 @@
 
 class UserController
 {
-    public function getProfile($userId = null, $message = ["title" => "Thông tin cá nhân"])
+    public function getProfile($userId = null)
     {
         AuthMiddleware::checkAuth($_SESSION['user']['role']);
 
         $userId = $userId ?? filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
-        
+
         if (!$userId) {
             header("Location: /{$_SESSION['user']['role']}/home");
             exit();
@@ -21,7 +21,10 @@ class UserController
             header("Location: /404");
             exit();
         }
-        $message['user'] = $user;
+        $message = [
+            "title" => "Thông tin cá nhân",
+            'user' => $user
+        ];
         return render("profile.php", $message);
     }
 
@@ -35,7 +38,7 @@ class UserController
             header("Location: /{$_SESSION['user']['role']}/home");
             exit();
         }
-        
+
         $message = ["title" => "Thông tin cá nhân",];
 
         $allowedFields = [
@@ -43,7 +46,8 @@ class UserController
             "student" => ["password", "email", "phone"]
         ];
 
-        $formData = array_intersect_key($_POST, array_flip($allowedFields[$role]));
+        $validKeys = array_fill_keys($allowedFields[$role], true);
+        $formData = array_intersect_key($_POST, $validKeys);
 
         if (!empty($formData["password"])) {
             $formData["password"] = password_hash($formData["password"], PASSWORD_BCRYPT);
@@ -55,14 +59,16 @@ class UserController
             $result = validateUploadFile($_FILES['avatar']);
 
             if ($result !== true) {
-               $message['errMessage'] = $result;
-               return $this->getProfile($userId, $message);
+                $_SESSION['errMessage'] = $result;
+                header("Location: /profile?id=$userId");
+                exit();
             }
 
             $secureUrl = uploadFile($_FILES['avatar']['tmp_name']);
             if (!$secureUrl || $secureUrl === "Upload failed: No URL returned") {
-                $message["errMessage"] = "Lỗi khi tải ảnh lên.";
-                return $this->getProfile($userId, $message);
+                $_SESSION["errMessage"] = "Lỗi khi tải ảnh lên.";
+                header("Location: /profile?id=$userId");
+                exit();
             }
 
             $formData['avatar_url'] = $secureUrl;
@@ -72,34 +78,37 @@ class UserController
         $isSuccess = $userModel->updateUserById($userId, $formData);
 
         if (!$isSuccess) {
-            $message['errMessage'] = "Cập nhật thông tin thất bại.";
+            $_SESSION['errMessage'] = "Cập nhật thông tin thất bại.";
         } else {
-            $message['successMessage'] = "Cập nhật thông tin thành công.";
+            $_SESSION['successMessage'] = "Cập nhật thông tin thành công.";
         }
 
-        return $this->getProfile($userId, $message);
+        header("Location: /profile?id=$userId");
+        exit();
     }
 
-    public function getDeleteUser() {
+    public function getDeleteUser()
+    {
         AuthMiddleware::checkAuth("teacher");
-        $userId =filter_input(INPUT_POST, 'id', FILTER_VALIDATE_INT);
+        $userId = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
 
         if (!$userId) {
             header("Location: /{$_SESSION['user']['role']}/home");
             exit();
         }
-        
+
         $userModal = new User();
         $isSuccess = $userModal->deleteUserById($userId);
-        $message = ["title" => "Thông tin cá nhân"];
 
-       if (!$isSuccess) {
-            $message['errMessage'] = "Xóa sinh viên thất bại";
-            return $this->getProfile($userId, $message);
+        if (!$isSuccess) {
+            $_SESSION['errMessage'] = "Xóa sinh viên thất bại";
+            header("Location: /profile?id={$userId}");
+            exit();
         }
 
         // Return the teacher's profile
-        $message['successMessage'] = "Xóa sinh viên thành công.";
-        return $this->getProfile($_SESSION['user']['id'], $message);
+        $_SESSION['successMessage'] = "Xóa sinh viên thành công.";
+        header("Location: /profile?id={$_SESSION['user']['id']}");
+        exit();
     }
 }

@@ -5,39 +5,39 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title><?= $title; ?></title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link
         href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
         rel="stylesheet" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha384-3TTOkDqU0UygpTuAjrsxU3dSYbAGIoXt2L7/g7K+d8ag04z4kEl+4Ub5q69T9aD2" crossorigin="anonymous" />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Poppins:wght@600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="<?php echo base_url("css/profile.css"); ?>">
     <link rel="stylesheet" href="<?php echo base_url('css/index.css'); ?>">
 </head>
 
 <body>
-    <?php if (!empty($errMessage)) : ?>
+    <?php if (!empty($_SESSION['errMessage'])) : ?>
         <div class="position-fixed top-0 end-0 p-3" style="z-index: 1050;">
             <div id="toastAlert" class="alert alert-warning alert-dismissible fade show" role="alert">
-                <span id="toastMessage"><?= htmlspecialchars($errMessage); ?></span>
-                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                <span id="toastMessage"><?= htmlspecialchars($_SESSION['errMessage']); ?></span>
             </div>
         </div>
+        <?php unset($_SESSION['errMessage']); ?>
     <?php endif; ?>
 
-    <?php if (!empty($successMessage)) : ?>
+    <?php if (!empty($_SESSION['successMessage'])) : ?>
         <div class="position-fixed top-0 end-0 p-3" style="z-index: 1050;">
             <div id="toastAlert" class="alert alert-success alert-dismissible fade show shadow-lg" role="alert">
                 <i class="fas fa-check-circle me-2"></i>
-                <span id="toastMessage"><?= htmlspecialchars($successMessage); ?></span>
-                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                <span id="toastMessage"><?= htmlspecialchars($_SESSION['successMessage']); ?></span>
             </div>
         </div>
+        <?php unset($_SESSION['successMessage']); ?>
     <?php endif; ?>
-
+    <?php $role = $user['role'] === 'teacher' ? 'giáo viên' : 'sinh viên' ?>
     <div class="profile-card">
-        <div class="profile-header">
-            <?php $role = $user['role'] === 'teacher' ? 'giáo viên' : 'sinh viên'; ?>
-            <h2 class="fw-bold">Thông tin <?= $role; ?></h2>
+        <div class="profile-header shadow-sm d-flex align-items-center">
+            <h2 class="fw-bold">Thông Tin Cá Nhân</h2>
+
         </div>
         <div class="profile-body">
             <div class="row align-items-center">
@@ -52,26 +52,26 @@
                 <div class="col-md-8">
                     <div class="card shadow-sm p-4">
 
-                        <h4 class="mb-3 text-primary"><i class="fas fa-id-badge"></i> Thông Tin Cá Nhân</h4>
+
                         <ul class="list-group list-group-flush">
                             <li class="list-group-item">
-                                <i class="fas fa-user-graduate text-secondary"></i> <strong>Vai trò:</strong>
+                                <strong>Vai trò:</strong>
                                 <span class="badge <?= $user['role'] === 'teacher' ? 'bg-danger' : 'bg-success'; ?> text-white"><?= ucfirst(htmlspecialchars($role)) ?></span>
                             </li>
                             <li class="list-group-item">
-                                <i class="fas fa-user-edit text-secondary"></i> <strong>Họ tên:</strong>
+                                <strong>Họ tên:</strong>
                                 <span class="text-dark"><?= htmlspecialchars($user['full_name']) ?></span>
                             </li>
                             <li class="list-group-item">
-                                <i class="fas fa-user text-secondary"></i> <strong>Tài khoản:</strong>
+                                <strong>Tài khoản:</strong>
                                 <span class="text-dark"><?= htmlspecialchars($user['username']) ?></span>
                             </li>
                             <li class="list-group-item">
-                                <i class="fas fa-envelope text-secondary"></i> <strong>Email:</strong>
+                                <strong>Email:</strong>
                                 <span class="text-dark"><?= htmlspecialchars($user['email']) ?></span>
                             </li>
                             <li class="list-group-item">
-                                <i class="fas fa-phone text-secondary"></i> <strong>SĐT:</strong>
+                                <strong>SĐT:</strong>
                                 <span class="text-dark"><?= $user['phone'] ? htmlspecialchars($user['phone']) : '<span class="text-muted">Chưa cập nhật</span>'; ?></span>
                             </li>
 
@@ -124,7 +124,7 @@
                 enctype="multipart/form-data">
                 <div class="modal-header">
                     <h5 class="modal-title fw-bold" id="editModalLabel">
-                        Chỉnh sửa thông tin sinh viên
+                        Chỉnh sửa thông tin <?= $role; ?>
                     </h5>
                     <button
                         type="button"
@@ -209,7 +209,7 @@
                         data-bs-dismiss="modal">
                         Đóng
                     </button>
-                    <button type="submit" class="btn btn-primary">Lưu thay đổi</button>
+                    <button type="submit" class="btn btn-success">Cập nhật</button>
                 </div>
             </form>
         </div>
@@ -227,30 +227,14 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
                     <!-- Form Xóa Dùng POST -->
-                    <form method="POST" action="/deleteUser">
-                        <input type="hidden" name="id" value="<?= $user['id']; ?>">
-                        <button type="submit" class="btn btn-danger">Xóa</button>
-                    </form>
+                    <a href="/deleteUser?id=<?= $user['id']; ?>" class="btn btn-danger">Xóa</a>
                 </div>
             </div>
         </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            const urlParams = new URLSearchParams(window.location.search);
 
-            if (!urlParams.has("id")) {
-                const userId = "<?php echo isset($user['id']) ? htmlspecialchars($user['id']) : ''; ?>";
-
-                if (userId) {
-                    urlParams.set("id", userId);
-                    const newUrl = window.location.pathname + "?" + urlParams.toString();
-                    history.replaceState(null, "", newUrl);
-                }
-            }
-        });
-    </script>
+    <script src="<?php echo base_url('js/toast.js') ?>"></script>
 </body>
 
 </html>

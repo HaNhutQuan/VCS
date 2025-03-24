@@ -12,13 +12,23 @@
 </head>
 
 <body>
-    <?php if (!empty($errMessage)) : ?>
+    <?php if (!empty($_SESSION['errMessage'])) : ?>
         <div class="position-fixed top-0 end-0 p-3" style="z-index: 1050;">
             <div id="toastAlert" class="alert alert-warning alert-dismissible fade show" role="alert">
-                <span id="toastMessage"><?= htmlspecialchars($errMessage); ?></span>
-                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                <span id="toastMessage"><?= htmlspecialchars($_SESSION['errMessage']); ?></span>
             </div>
         </div>
+        <?php unset($_SESSION['errMessage']); ?>
+    <?php endif; ?>
+
+    <?php if (!empty($_SESSION['successMessage'])) : ?>
+        <div class="position-fixed top-0 end-0 p-3" style="z-index: 1050;">
+            <div id="toastAlert" class="alert alert-success alert-dismissible fade show shadow-lg" role="alert">
+                <i class="fas fa-check-circle me-2"></i>
+                <span id="toastMessage"><?= htmlspecialchars($_SESSION['successMessage']); ?></span>
+            </div>
+        </div>
+        <?php unset($_SESSION['successMessage']); ?>
     <?php endif; ?>
     <div class="login-container">
         <img src="<?php echo base_url("image/logo.svg"); ?>" alt="Logo" width="100">
@@ -52,7 +62,7 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
+    <script src="<?php echo base_url('js/toast.js') ?>"></script>
 </body>
 
 </html>

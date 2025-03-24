@@ -22,8 +22,9 @@ class AuthController
         $password = $_POST["password"];
 
         if(empty($username) || empty($password)) {
-            $data["errMessage"] = "Vui lòng nhập đầy đủ thông tin đăng nhập";
-            return render("login.php", $data);
+            $_SESSION["errMessage"] = "Vui lòng nhập đầy đủ thông tin đăng nhập";
+            header("Location: login");
+            exit();
         }
 
         $userModal = new User();
@@ -41,9 +42,10 @@ class AuthController
             exit();
         }
 
-        $data["errMessage"] = "Thông tin đăng nhập hoặc mật khẩu sai";
+        $_SESSION["errMessage"] = "Thông tin đăng nhập hoặc mật khẩu sai";
 
-        return render("login.php", $data);
+        header("Location: login");
+        exit();
     }
 
     public function getRegister()

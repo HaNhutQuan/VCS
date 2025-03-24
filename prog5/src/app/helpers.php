@@ -35,33 +35,29 @@ function render($view = "", $data = [])
     return ob_get_clean();
 }
 
-function validateUploadFile($file, $extraTypes = [], $extraExtensions = [])
+function validateUploadFile($file, $extraTypes = [])
 {
     $maxSize = 5 * 1024 * 1024; // 5MB
 
     if ($file['size'] > $maxSize) {
         return 'Tệp quá lớn (tối đa 5MB).';
     }
-    // 'application/pdf', 'application/msword',
-    //  'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
-    $allowedMimeTypes = array_merge([
-        'image/jpeg',
-        'image/png',
+    // 'pdf'  => 'application/pdf',
+    //     'doc'  => 'application/msword',
+    //     'docx' => 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+    $allowedTypes = array_merge([
+        'jpg'  => 'image/jpeg',
+        'jpeg' => 'image/jpeg',
+        'png'  => 'image/png',
+        'svg'  => 'image/svg+xml'
     ], $extraTypes);
 
     $mimeType = mime_content_type($file['tmp_name']) ?? '';
-    if (!in_array($mimeType, $allowedMimeTypes, true)) {
-        return 'Loại tệp không được hỗ trợ.';
-    }
-    // 'svg', 'pdf', 'doc', 'docx'
-    $allowedExtensions = array_merge([
-        'jpg', 'jpeg', 'png'
-    ], $extraExtensions);
-
     $fileExtension = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
 
-    if (!in_array($fileExtension, $allowedExtensions, true)) {
-        return 'Phần mở rộng tệp không hợp lệ.';
+
+    if (!isset($allowedTypes[$fileExtension]) || $allowedTypes[$fileExtension] !== $mimeType) {
+        return 'Tệp không hợp lệ hoặc không được hỗ trợ.';
     }
 
     return true;
