@@ -12,6 +12,19 @@
 </head>
 
 <body>
+    <?php
+    $uploadDir = __DIR__ . "/../../storage/uploads/";
+    $hintFiles = glob($uploadDir . '*.hint');
+    $hints = [];
+    foreach ($hintFiles as $hintFile) {
+        $hintContent = file_get_contents($hintFile);
+        $answerBase = pathinfo($hintFile, PATHINFO_FILENAME);
+        $hints[] = [
+            'hint' => $hintContent,
+            'answer' => $answerBase,
+        ];
+    }
+    ?>
     <?php if (!empty($_SESSION['errMessage'])) : ?>
         <div class="position-fixed top-0 end-0 p-3" style="z-index: 1050;">
             <div id="toastAlert" class="alert alert-warning alert-dismissible fade show" role="alert">
@@ -49,7 +62,7 @@
             </div>
         </div>
     </header>
-        
+
     <div class="container mt-4">
         <h2 class="mb-3">Danh sách bài tập</h2>
         <table class="table table-striped table-hover">
@@ -107,7 +120,36 @@
                         </div>
                     </div>
                 <?php endforeach; ?>
+            </tbody>
+        </table>
+    </div>
 
+    <div class="container mt-5">
+        <h2 class="mb-3">Danh sách câu đố</h2>
+        <table class="table table-striped table-hover">
+            <thead>
+                <tr>
+                    <th>Gợi ý</th>
+                    <th>Nhập đáp án</th>
+                    <?php if (!empty($isCheckChallengeDisabled)): ?>
+                    <th>Nội dung</th>
+                    <th>Kết quả</th>
+                    <?php endif; ?>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($hints as $h): ?>
+                    <tr>
+                        <td class="text-wrap"><?= htmlspecialchars($h['hint']); ?></td>
+                        <td>
+                            <input type="text" class="form-control answer-input" data-challenge-id="<?= $challenge['id']; ?>">
+                        </td>
+                        <td>
+                            <button class="btn btn-primary btn-check-answer" data-challenge-id="<?= $challenge['id']; ?>">Kiểm tra</button>
+                            <div class="result mt-2 text-success fw-bold" id="result_<?= $challenge['id']; ?>"></div>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
             </tbody>
         </table>
     </div>

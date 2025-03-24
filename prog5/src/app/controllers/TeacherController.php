@@ -111,7 +111,8 @@ class TeacherController
 
         $assignmentModal = new Assignment();
         $isSuccess = $assignmentModal->deleteAssignmentById($assignId);
-        //$isSuccess = true;
+
+
         if (!$isSuccess) {
             $_SESSION['errMessage'] = "Xóa bài tập thất bại.";
         } else {
@@ -132,7 +133,8 @@ class TeacherController
         die();
     }
 
-    public function getSubmission() {
+    public function getSubmission()
+    {
         AuthMiddleware::checkAuth("teacher");
 
         $id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
@@ -144,7 +146,7 @@ class TeacherController
 
         $submissionModal = new Submission();
         $submission = $submissionModal->getSubmissionById($id);
-        
+
         $assignmentModal = new Assignment();
         $assignment = $assignmentModal->getAssignmentById($submission['assignment_id']);
 
@@ -157,8 +159,71 @@ class TeacherController
             "assignment" => $assignment,
             "submission" =>  $submission
         ];
-        
-        return render("teacher/submission.php", $data);
 
+        return render("teacher/submission.php", $data);
+    }
+
+    public function createChallenge()
+    {
+        AuthMiddleware::checkAuth("teacher");
+
+        $hint = $_POST['hint'] ?? '';
+        if (empty($hint)) {
+            $_SESSION['errMessage'] = "Vui lòng nhập gợi ý.";
+            header("Location: /teacher/home");
+            exit();
+        }
+
+        if (isset($_FILES['text_file']) && $_FILES['text_file']['error'] === UPLOAD_ERR_OK) {
+            $file = $_FILES['text_file'];
+            $originalName  = $file['name'];
+            $tmpName = $file['tmp_name'];
+        
+            $fileExtension =  pathinfo($originalName, PATHINFO_EXTENSION);
+            $fileName = pathinfo($originalName, PATHINFO_FILENAME); 
+
+            if($fileExtension !== 'txt') {
+                $_SESSION['errMessage'] = "Chỉ chấp nhận file .txt";
+                header("Location: /teacher/home");
+                exit();
+            }
+           
+            $fileName = remove_vietnamese_accent($fileName);
+            $fileName = preg_replace('/[^a-zA-Z0-9_ ]/', '', $fileName);
+            $fileName = strtolower($fileName);
+            $fileName = preg_replace('/[\s_]+/', ' ', $fileName); 
+            $fileName = trim($fileName);
+
+            if (empty($fileName)) {
+                $_SESSION['errMessage'] = "Tên file không hợp lệ (phải có ít nhất 1 ký tự)";
+                header("Location: /teacher/home");
+                exit();
+            }
+            $uploadDir = __DIR__ . "/../storage/uploads";
+           
+        
+            if (!is_dir($uploadDir)) {
+                mkdir($uploadDir, 0755, true);
+            }
+
+            $dest = $uploadDir . '/' . $fileName . '.txt';
+            if(move_uploaded_file($tmpName, $dest)) {
+                $hintFile = $uploadDir . '/' . $fileName . '.hint';
+                file_put_contents($hintFile, $hint);
+
+                $_SESSION['successMessage'] = "Tạo thách thức thành công.";
+                header("Location: /teacher/home");
+                exit();
+            } else {
+                $_SESSION['errMessage'] = "Lỗi khi tải file lên.";
+                header("Location: /teacher/home");
+                exit();
+            }
+        } else {
+
+            $_SESSION['errMessage'] = "Vui lòng chọn file.";
+            header("Location: /teacher/home");
+            exit();
+        }
     }
 }

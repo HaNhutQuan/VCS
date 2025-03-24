@@ -30,8 +30,6 @@ RUN chown -R www-data:www-data /var/www/html && \
     find /var/www/html -type d -exec chmod 755 {} \;
 
 
-
-
 EXPOSE 80
 
 CMD ["apache2-foreground"]

@@ -32,8 +32,9 @@ return [
         "/profile"          => "UserController@updateProfile",
 
 
-        "/createAssignment" => "TeacherController@createAssignment",
-        "/updateAssignment" => "TeacherController@updateAssignment"
+        "/teacher/createAssignment" => "TeacherController@createAssignment",
+        "/teacher/updateAssignment" => "TeacherController@updateAssignment",
+        "/teacher/createChallenge"  => "TeacherController@createChallenge",
 
     ]
 ];
