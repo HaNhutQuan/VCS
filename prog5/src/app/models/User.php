@@ -11,6 +11,17 @@ class User
         $this->conn = Database::getInstance()->getConnection();
     }
 
+    public function getUsers()
+    {
+        $sql = "SELECT * FROM $this->table WHERE id != :id ORDER BY role";
+
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bindParam(":id", $_SESSION['user']['id']);
+        $stmt->execute();
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
     public function getUserById($id)
     {
         $sql = "SELECT * FROM $this->table WHERE id = :id";
@@ -54,15 +65,15 @@ class User
         return $stmt->execute($data);
     }
 
-    public function deleteUserById($id) {
+    public function deleteUserById($id)
+    {
         $sql = "DELETE FROM users WHERE id = :id";
         $stmt = $this->conn->prepare($sql);
         $stmt->bindParam(':id', $id);
         $stmt->execute();
         if ($stmt->rowCount() > 0) {
             return true;
-        } 
+        }
         return false;
-
     }
 }

@@ -34,11 +34,11 @@
         <?php unset($_SESSION['successMessage']); ?>
     <?php endif; ?>
     <?php $role = $user['role'] === 'teacher' ? 'giáo viên' : 'sinh viên' ?>
-    <div class="profile-card">
-        <div class="profile-header shadow-sm d-flex align-items-center">
+    <div class="profile-card mt-5">
+        <!-- <div class="profile-header shadow-sm d-flex align-items-center">
             <h2 class="fw-bold">Thông Tin Cá Nhân</h2>
 
-        </div>
+        </div> -->
         <div class="profile-body">
             <div class="row align-items-center">
 
@@ -46,14 +46,13 @@
                     <img
                         src="<?php echo $user['avatar_url']; ?>"
                         alt="Avatar"
-                        class="profile-img" />
+                        class="profile-img"
+                        />
                 </div>
 
-                <div class="col-md-8">
+                <div class="col-md-7">
                     <div class="card shadow-sm p-4">
-
-
-                        <ul class="list-group list-group-flush">
+                        <ul class="list-group list-group-flush fs-6">
                             <li class="list-group-item">
                                 <strong>Vai trò:</strong>
                                 <span class="badge <?= $user['role'] === 'teacher' ? 'bg-danger' : 'bg-success'; ?> text-white"><?= ucfirst(htmlspecialchars($role)) ?></span>
@@ -122,7 +121,7 @@
                 method="POST"
                 class="modal-content"
                 enctype="multipart/form-data">
-                <div class="modal-header">
+                <!-- <div class="modal-header">
                     <h5 class="modal-title fw-bold" id="editModalLabel">
                         Chỉnh sửa thông tin <?= $role; ?>
                     </h5>
@@ -131,14 +130,14 @@
                         class="btn-close"
                         data-bs-dismiss="modal"
                         aria-label="Đóng"></button>
-                </div>
+                </div> -->
                 <div class="modal-body">
 
                     <input
                         type="hidden"
                         name="id"
                         value="<?php echo htmlspecialchars($user['id']); ?>" />
-                    <div class="mb-3">
+                    <div class="mb-2">
                         <label for="username" class="form-label">Tài khoản</label>
                         <input
                             type="text"
@@ -151,7 +150,7 @@
                             name="username"
                             <?php endif; ?> />
                     </div>
-                    <div class="mb-3">
+                    <div class="mb-2">
                         <label for="password" class="form-label">Mật khẩu</label>
                         <input
                             type="password"
@@ -160,7 +159,7 @@
                             name="password"
                             value="" />
                     </div>
-                    <div class="mb-3">
+                    <div class="mb-2">
                         <label for="full_name" class="form-label">Họ tên</label>
                         <input
                             type="text"
@@ -173,7 +172,7 @@
                             name="full_name"
                             <?php endif; ?> />
                     </div>
-                    <div class="mb-3">
+                    <div class="mb-2">
                         <label for="email" class="form-label">Email</label>
                         <input
                             type="email"
@@ -182,7 +181,7 @@
                             name="email"
                             value="<?php echo htmlspecialchars($user['email']); ?>" />
                     </div>
-                    <div class="mb-3">
+                    <div class="mb-2">
                         <label for="phone" class="form-label">Số điện thoại</label>
                         <input
                             type="text"
@@ -192,7 +191,7 @@
                             value="<?php echo htmlspecialchars($user['phone']); ?>" />
                     </div>
                     <?php if ($isStudent && $isSelf) : ?>
-                        <div class="mb-3">
+                        <div class="mb-2">
                             <label for="avatar" class="form-label">Upload Avatar</label>
                             <input
                                 type="file"

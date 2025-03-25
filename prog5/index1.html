@@ -1,0 +1,27 @@
+<div class="container mt-5">
+    <div class="row">
+        <?php foreach($correctAnswers as $correctAnswer): ?>
+        <div class="col-md-12">
+            <div class="card mb-3 shadow-sm">
+                <div class="card-body">
+                    <p class="card-text">
+                        <strong>Đáp án: </strong><span class="badge bg-success p-2 "><?= htmlspecialchars($correctAnswer['answer']); ?></span>
+                    </p>
+                    <p class="card-text">
+                        <?= htmlspecialchars($correctAnswer['hint']); ?>
+                    </p>
+
+                    <div class="d-flex">
+                   
+                        
+                        <input type="text" class="form-control answer-input me-2" name="answer"
+                            placeholder="Nhập đáp án" required>
+                    
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <?php endforeach; ?>
+    </div>
+</div>

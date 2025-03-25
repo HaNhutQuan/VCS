@@ -111,3 +111,19 @@ function remove_vietnamese_accent($str) {
     $str = preg_replace('/Đ/u', 'D', $str);
     return $str;
 }
+
+function hasStudentAnswered($student_id, $filename) {
+    if (!file_exists($filename)) {
+        return false;
+    }
+
+    $student_ids = array_map('trim', file($filename, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES));
+
+    return in_array($student_id, $student_ids);
+}
+
+function normalizeText($text) {
+    $text = str_replace(["\r\n", "\r", "\n"], " ", $text);
+    $text = preg_replace('/\s+/', ' ', $text);
+    return trim($text);
+}

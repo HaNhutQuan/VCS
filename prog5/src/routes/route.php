@@ -16,7 +16,7 @@ return [
         "/teacher/assignment"   => "TeacherController@getAssignment",
         "/teacher/deleteAssignment" => "TeacherController@deleteAssignment",
         "/teacher/getSubmission"    => "TeacherController@getSubmission",
-        
+
         "/profile"              => "UserController@getProfile",
         "/deleteUser"       => "UserController@getDeleteUser"
 
@@ -28,7 +28,7 @@ return [
         "/register"         => "AuthController@postRegister",
 
         "/student/submitSubmission,"   => "StudentController@postSubmission",
-        "/student/submitAnswer,"   => "StudentController@postAnswer",
+        "/student/submitAnswer"       => "StudentController@postAnswer",
 
         "/profile"          => "UserController@updateProfile",
 

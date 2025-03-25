@@ -7,23 +7,52 @@ class StudentController
     {
         AuthMiddleware::checkAuth("student");
 
+        $userModal = new User();
+        $users = $userModal->getUsers();
+       
         $assignmentModal = new Assignment();
 
         $assignments = $assignmentModal->getAssignmentsByStudentId($_SESSION['user']['id']);
 
+        $answerDir = __DIR__ . "/../storage/answers/";
         $uploadDir = __DIR__ . "/../storage/uploads/";
+        $answerFiles = glob($answerDir . '*.answer');
+        $filenames = [];
+        $correctAnswers = [];
+
+        foreach ($answerFiles as $answerFile) {
+            if (hasStudentAnswered($_SESSION['user']['id'], $answerFile)) {
+                $filename = pathinfo($answerFile, PATHINFO_FILENAME);
+                $filenames[] = $filename;
+
+                $correctAnswers[] = [
+                    "answer"    => $filename,
+                    "content"   => file_get_contents($uploadDir . $filename . ".txt"),
+                    "hint"      => file_get_contents($uploadDir . $filename . ".hint")
+                ];
+            }
+        }
+
         $hintFiles = glob($uploadDir . '*.hint');
         $challenges = [];
+
         foreach ($hintFiles as $hintFile) {
+            $filename = pathinfo($hintFile, PATHINFO_FILENAME);
+            if (in_array($filename, $filenames)) {
+                continue;
+            }
             $hintContent = file_get_contents($hintFile);
             $challenges[] = [
                 'hint' => $hintContent
             ];
         }
+        
         $data = [
             "title" => "Bảng điều khiển",
-            "assignments" => $assignments,
-            "challenges" => $challenges
+            "users" => $users,
+            "assignments" => $assignments ?? [],
+            "challenges" => $challenges,
+            "correctAnswers" => $correctAnswers
         ];
 
 
@@ -85,19 +114,55 @@ class StudentController
         header("Location: /student/home");
         exit();
     }
-    public function postAnswer() {
-        AUTHMiddleware::checkAuth("student");
+    public function postAnswer()
+    {
+        AuthMiddleware::checkAuth("student");
 
-        
-    }
-
-    function hasStudentAnswered($student_id, $filename) {
-        if (!file_exists($filename)) {
-            return false;
+        if (!isset($_POST['hint'])) {
+            $_SESSION['errMessage'] = "Có lỗi xảy ra.";
+            header("Location: /student/home");
+            exit();
         }
-    
-        $student_ids = array_map('trim', file($filename, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES));
-    
-        return in_array($student_id, $student_ids);
+
+        if (!isset($_POST['answer'])) {
+            $_SESSION['errMessage'] = "Vui lòng điền đáp án.";
+            header("Location: /student/home");
+            exit();
+        }
+
+        $userAnswer = $_POST['answer'];
+        $pattern = '/[^a-zA-Z\s]/';
+
+        if (preg_match($pattern, $userAnswer)) {
+            $_SESSION['errMessage'] = "Vui lòng điền đáp án không dấu và các từ cách nhau bởi 1 khoảng trắng.";
+            header("Location: /student/home");
+            exit();
+        }
+
+        $userAnswer = strtolower($userAnswer);
+        $userHint = normalizeText(strtolower($_POST['hint']));
+
+        $answerDir = __DIR__ . "/../storage/answers";
+        if (!is_dir($answerDir)) {
+            mkdir($answerDir, 0755, true);
+        }
+
+        $uploadDir = __DIR__ . "/../storage/uploads/";
+        $hintFiles = glob($uploadDir . '*.hint');
+        foreach ($hintFiles as $hintFile) {
+            $correctHint  = normalizeText(strtolower(file_get_contents($hintFile)));
+            $correctAnswer = pathinfo($hintFile, PATHINFO_FILENAME);
+
+            if ($userHint === $correctHint && $userAnswer === $correctAnswer) {
+                $dest = $uploadDir . "../answers/" . $correctAnswer . ".answer";
+                file_put_contents($dest, $_SESSION['user']['id'] . PHP_EOL, FILE_APPEND);
+                $_SESSION['successMessage'] = "Chúc mừng bạn đã đoán đúng!";
+                header("Location: /student/home");
+                exit();
+            }
+        }
+        $_SESSION['errMessage'] = "Bạn đã đoán sai!";
+        header("Location: /student/home");
+        exit();
     }
 }
