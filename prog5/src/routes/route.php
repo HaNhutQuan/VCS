@@ -2,40 +2,37 @@
 
 return [
     "GET"   => [
-        "/"                     => "AuthController@getLogin",
-        "/login"                => "AuthController@getLogin",
-        "/register"             => "AuthController@getRegister",
-        "/logout"               => "AuthController@getLogout",
-        "/404"                  => "AuthController@notFound",
+        "/"                         => "AuthController@getLogin",
+        "/login"                    => "AuthController@getLogin",
+        "/register"                 => "AuthController@getRegister",
+        "/logout"                   => "AuthController@getLogout",
+        "/404"                      => "AuthController@notFound",
 
+        "/student/home"             => "StudentController@home",
 
-
-        "/student/home"         => "StudentController@home",
-
-        "/teacher/home"         => "TeacherController@home",
-        "/teacher/assignment"   => "TeacherController@getAssignment",
+        "/teacher/home"             => "TeacherController@home",
+        "/teacher/assignment"       => "TeacherController@getAssignment",
         "/teacher/deleteAssignment" => "TeacherController@deleteAssignment",
         "/teacher/getSubmission"    => "TeacherController@getSubmission",
 
-        "/profile"              => "UserController@getProfile",
-        "/deleteUser"       => "UserController@getDeleteUser"
+        "/profile"                  => "UserController@getProfile",
+        "/deleteUser"               => "UserController@getDeleteUser",
 
-
-
+        "/chat"                     => "ChatController@getMessages"
     ],
     "POST"  => [
-        "/login"            => "AuthController@postLogin",
-        "/register"         => "AuthController@postRegister",
+        "/login"                    => "AuthController@postLogin",
+        "/register"                 => "AuthController@postRegister",
 
-        "/student/submitSubmission,"   => "StudentController@postSubmission",
-        "/student/submitAnswer"       => "StudentController@postAnswer",
+        "/student/submitSubmission" => "StudentController@postSubmission",
+        "/student/submitAnswer"     => "StudentController@postAnswer",
 
-        "/profile"          => "UserController@updateProfile",
-
+        "/profile"                  => "UserController@updateProfile",
 
         "/teacher/createAssignment" => "TeacherController@createAssignment",
         "/teacher/updateAssignment" => "TeacherController@updateAssignment",
         "/teacher/createChallenge"  => "TeacherController@createChallenge",
 
+        "/chat/send"                => "ChatController@sendMessage"
     ]
 ];

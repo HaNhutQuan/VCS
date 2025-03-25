@@ -4,6 +4,10 @@ class UserController
 {
     public function getProfile($userId = null)
     {
+        if (!isset($_SESSION['user'])) {
+            header("Location: /login");
+            exit();
+        }
         AuthMiddleware::checkAuth($_SESSION['user']['role']);
 
         $userId = $userId ?? filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
