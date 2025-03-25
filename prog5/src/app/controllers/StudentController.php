@@ -31,7 +31,7 @@ class StudentController
     }
     public function getProfile() {}
 
-    public function postSubmissions()
+    public function postSubmission()
     {
         AuthMiddleware::checkAuth("student");
 
@@ -84,6 +84,11 @@ class StudentController
 
         header("Location: /student/home");
         exit();
+    }
+    public function postAnswer() {
+        AUTHMiddleware::checkAuth("student");
+
+        
     }
 
     function hasStudentAnswered($student_id, $filename) {

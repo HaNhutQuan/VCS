@@ -27,7 +27,8 @@ return [
         "/login"            => "AuthController@postLogin",
         "/register"         => "AuthController@postRegister",
 
-        "/student/submit"   => "StudentController@postSubmissions",
+        "/student/submitSubmission,"   => "StudentController@postSubmission",
+        "/student/submitAnswer,"   => "StudentController@postAnswer",
 
         "/profile"          => "UserController@updateProfile",
 

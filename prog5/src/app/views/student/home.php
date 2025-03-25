@@ -92,7 +92,7 @@
                                     <h5 class="modal-title" id="submitAssignmentModalLabel_<?= $assignment['assignment_id']; ?>">Nộp bài tập</h5>
                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
                                 </div>
-                                <form action="/student/submit" method="POST" enctype="multipart/form-data">
+                                <form action="/student/submitSubmission" method="POST" enctype="multipart/form-data">
                                     <div class="modal-body">
                                         <input type="hidden" name="assignment_id" value="<?= htmlspecialchars($assignment['assignment_id']); ?>">
                                         <div class="mb-3">
