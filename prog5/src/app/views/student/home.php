@@ -121,13 +121,14 @@
                 <div class="col-md-12">
                     <div class="card mb-3 shadow-sm">
                         <div class="card-body">
-                            <
                             <p class="card-text"><?= htmlspecialchars($challenge['hint']); ?></p>
-                            <div class="d-flex">
-                                <input type="text" class="form-control answer-input me-2" data-challenge-id="<?= $h['id']; ?>" placeholder="Nhập đáp án">
-                                <button class="btn btn-primary btn-check-answer" data-challenge-id="<?= $h['id']; ?>">Kiểm tra</button>
-                            </div>
-                            <div class="result mt-2 text-success fw-bold" id="result_<?= $h['id']; ?>"></div>
+                            <form method="post" action="challenge.php">
+                                <div class="d-flex">
+                                    <input type="hidden" name="hint" value="<?= htmlspecialchars($challenge['hint']); ?>">
+                                    <input type="text" class="form-control answer-input me-2" name="answer" placeholder="Nhập đáp án" required>
+                                    <button type="submit" class="btn btn-primary">Kiểm tra</button>
+                                </div>
+                            </form>
                         </div>
                     </div>
                 </div>
