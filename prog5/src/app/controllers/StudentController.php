@@ -10,9 +10,20 @@ class StudentController
         $assignmentModal = new Assignment();
 
         $assignments = $assignmentModal->getAssignmentsByStudentId($_SESSION['user']['id']);
+
+        $uploadDir = __DIR__ . "/../storage/uploads/";
+        $hintFiles = glob($uploadDir . '*.hint');
+        $challenges = [];
+        foreach ($hintFiles as $hintFile) {
+            $hintContent = file_get_contents($hintFile);
+            $challenges[] = [
+                'hint' => $hintContent
+            ];
+        }
         $data = [
             "title" => "Bảng điều khiển",
-            "assignments" => $assignments
+            "assignments" => $assignments,
+            "challenges" => $challenges
         ];
 
 
@@ -73,5 +84,15 @@ class StudentController
 
         header("Location: /student/home");
         exit();
+    }
+
+    function hasStudentAnswered($student_id, $filename) {
+        if (!file_exists($filename)) {
+            return false;
+        }
+    
+        $student_ids = array_map('trim', file($filename, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES));
+    
+        return in_array($student_id, $student_ids);
     }
 }

@@ -30,20 +30,6 @@
         </div>
         <?php unset($_SESSION['successMessage']); ?>
     <?php endif; ?>
-
-    <?php
-    $uploadDir = __DIR__ . "/../../storage/uploads/";
-    $hintFiles = glob($uploadDir . '*.hint');
-    $hints = [];
-    foreach ($hintFiles as $hintFile) {
-        $hintContent = file_get_contents($hintFile);
-        $answerBase = pathinfo($hintFile, PATHINFO_FILENAME);
-        $hints[] = [
-            'hint' => $hintContent,
-            'answer' => $answerBase,
-        ];
-    }
-    ?>
     <header class="p-3 mb-3 border-bottom bg-white shadow-sm">
         <div class="container">
             <div class="d-flex flex-wrap align-items-center justify-content-between">
@@ -73,7 +59,7 @@
                     <div class="card-body">
                         <i class="fas fa-user-graduate fa-3x mb-3"></i>
                         <h5 class="card-title">Tổng số sinh viên</h5>
-                        <p class="card-text fs-4 fw-bold"><?php echo count($students); ?></p>
+                        <p class="card-text fs-4 fw-bold"><?= count($students); ?></p>
                     </div>
                 </div>
             </div>
@@ -82,7 +68,7 @@
                     <div class="card-body">
                         <i class="fas fa-book fa-3x mb-3"></i>
                         <h5 class="card-title">Tổng số bài tập đang giao</h5>
-                        <p class="card-text fs-4 fw-bold"><?php echo count($assignments); ?></p>
+                        <p class="card-text fs-4 fw-bold"><?= count($assignments); ?></p>
                     </div>
                 </div>
             </div>
@@ -91,7 +77,7 @@
                     <div class="card-body">
                         <i class="fas fa-lightbulb fa-3x mb-3"></i>
                         <h5 class="card-title">Tổng số câu đố</h5>
-                        <p class="card-text fs-4 fw-bold"><?php echo count($hintFiles); ?></p>
+                        <p class="card-text fs-4 fw-bold"><?php echo count($challenges); ?></p>
                     </div>
                 </div>
             </div>
@@ -105,8 +91,8 @@
                         <h4 class="mb-0">Danh sách bài tập</h4>
                     </div>
                     <div class="table-responsive">
-                        <table class="table table-striped table-hover align-middle">
-                            <thead class="table-dark">
+                        <table class="table table-striped table-hover">
+                            <thead class="table">
                                 <tr>
                                     <th class="text-center" style="width: 10%;">ID</th>
                                     <th class="text-start" style="width: 60%;">Tên bài tập</th>
@@ -131,27 +117,31 @@
                 </div>
 
                 <div class="card border-0 shadow-lg mt-4">
-                    <div class="card-header bg-white border-0">
+                    <div class="card-header ">
                         <h4 class="mb-0">Danh sách câu đố</h4>
                     </div>
                     <div class="table-responsive">
                         <table class="table table-striped table-hover align-middle">
-                            <thead class="table-dark">
+                            <thead class="table">
                                 <tr>
                                     <th class="text-center">ID</th>
-                                    <th>Gợi ý</th>
-                                    <th>Đáp án</th>
+                                    <th class="text-start" style="width: 40%;">Gợi ý</th>
+                                    <th class="text-start" style="width: 50%;">Nội dung bài thơ</th>
+                                    <th class="text-start" style="width: 5%;">Đáp án</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <?php
                                 $index = 1;
-                                foreach ($hints as $h) : ?>
+                                foreach ($challenges as $challenge) : ?>
                                     <tr>
-                                        <td class="text-center"><?= $index++; ?></td>
-                                        <td><?= htmlspecialchars($h['hint']); ?></td>
+                                        <td class="text-center fw-bold"><?= $index++; ?></td>
+                                        <td class="fs-6 text-muted"><?= htmlspecialchars($challenge['hint']); ?></td>
                                         <td>
-                                            <span class="badge bg-success text-dark p-2"><?= htmlspecialchars($h['answer']); ?></span>
+                                            <textarea class="form-control border-0 bg-light fs-5" rows="5" readonly><?= htmlspecialchars($challenge['poem']); ?></textarea>
+                                        </td>
+                                        <td class="text-start">
+                                            <span class="badge bg-success p-2 "><?= htmlspecialchars($challenge['answer']); ?></span>
                                         </td>
                                     </tr>
                                 <?php endforeach; ?>
@@ -159,6 +149,7 @@
                         </table>
                     </div>
                 </div>
+
             </div>
 
 

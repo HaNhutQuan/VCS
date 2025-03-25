@@ -14,11 +14,27 @@ class TeacherController
 
         $submissions = $assignmentModal->getSubmittedAssignments($_SESSION['user']['id']);
 
+
+        $uploadDir = __DIR__ . "/../storage/uploads/";
+        $hintFiles = glob($uploadDir . '*.hint');
+        $challenges = [];
+        foreach ($hintFiles as $hintFile) {
+            $hintContent = file_get_contents($hintFile);
+            $answerBase = pathinfo($hintFile, PATHINFO_FILENAME);
+            $poem = file_get_contents($uploadDir . $answerBase . '.txt');
+            $challenges[] = [
+                'hint' => $hintContent,
+                'answer' => $answerBase,
+                'poem' => $poem
+            ];
+        }
+       
         $message = [
             "title" => "Bảng điều khiển",
             'students' => $students,
             'assignments' => $assignments,
-            'submissions' => $submissions
+            'submissions' => $submissions,
+            'challenges' => $challenges
         ];
 
         return render("teacher/home.php", $message);
@@ -178,20 +194,20 @@ class TeacherController
             $file = $_FILES['text_file'];
             $originalName  = $file['name'];
             $tmpName = $file['tmp_name'];
-        
-            $fileExtension =  pathinfo($originalName, PATHINFO_EXTENSION);
-            $fileName = pathinfo($originalName, PATHINFO_FILENAME); 
 
-            if($fileExtension !== 'txt') {
+            $fileExtension =  pathinfo($originalName, PATHINFO_EXTENSION);
+            $fileName = pathinfo($originalName, PATHINFO_FILENAME);
+
+            if ($fileExtension !== 'txt') {
                 $_SESSION['errMessage'] = "Chỉ chấp nhận file .txt";
                 header("Location: /teacher/home");
                 exit();
             }
-           
+
             $fileName = remove_vietnamese_accent($fileName);
             $fileName = preg_replace('/[^a-zA-Z0-9_ ]/', '', $fileName);
             $fileName = strtolower($fileName);
-            $fileName = preg_replace('/[\s_]+/', ' ', $fileName); 
+            $fileName = preg_replace('/[\s_]+/', ' ', $fileName);
             $fileName = trim($fileName);
 
             if (empty($fileName)) {
@@ -200,18 +216,18 @@ class TeacherController
                 exit();
             }
             $uploadDir = __DIR__ . "/../storage/uploads";
-           
-        
+
+
             if (!is_dir($uploadDir)) {
                 mkdir($uploadDir, 0755, true);
             }
 
             $dest = $uploadDir . '/' . $fileName . '.txt';
-            if(move_uploaded_file($tmpName, $dest)) {
+            if (move_uploaded_file($tmpName, $dest)) {
                 $hintFile = $uploadDir . '/' . $fileName . '.hint';
                 file_put_contents($hintFile, $hint);
 
-                $_SESSION['successMessage'] = "Tạo thách thức thành công.";
+                $_SESSION['successMessage'] = "Tạo câu đố thành công.";
                 header("Location: /teacher/home");
                 exit();
             } else {

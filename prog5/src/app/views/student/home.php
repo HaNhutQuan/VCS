@@ -13,17 +13,7 @@
 
 <body>
     <?php
-    $uploadDir = __DIR__ . "/../../storage/uploads/";
-    $hintFiles = glob($uploadDir . '*.hint');
-    $hints = [];
-    foreach ($hintFiles as $hintFile) {
-        $hintContent = file_get_contents($hintFile);
-        $answerBase = pathinfo($hintFile, PATHINFO_FILENAME);
-        $hints[] = [
-            'hint' => $hintContent,
-            'answer' => $answerBase,
-        ];
-    }
+
     ?>
     <?php if (!empty($_SESSION['errMessage'])) : ?>
         <div class="position-fixed top-0 end-0 p-3" style="z-index: 1050;">
@@ -126,33 +116,25 @@
 
     <div class="container mt-5">
         <h2 class="mb-3">Danh sách câu đố</h2>
-        <table class="table table-striped table-hover">
-            <thead>
-                <tr>
-                    <th>Gợi ý</th>
-                    <th>Nhập đáp án</th>
-                    <?php if (!empty($isCheckChallengeDisabled)): ?>
-                    <th>Nội dung</th>
-                    <th>Kết quả</th>
-                    <?php endif; ?>
-                </tr>
-            </thead>
-            <tbody>
-                <?php foreach ($hints as $h): ?>
-                    <tr>
-                        <td class="text-wrap"><?= htmlspecialchars($h['hint']); ?></td>
-                        <td>
-                            <input type="text" class="form-control answer-input" data-challenge-id="<?= $challenge['id']; ?>">
-                        </td>
-                        <td>
-                            <button class="btn btn-primary btn-check-answer" data-challenge-id="<?= $challenge['id']; ?>">Kiểm tra</button>
-                            <div class="result mt-2 text-success fw-bold" id="result_<?= $challenge['id']; ?>"></div>
-                        </td>
-                    </tr>
-                <?php endforeach; ?>
-            </tbody>
-        </table>
+        <div class="row">
+            <?php foreach ($challenges as $challenge): ?>
+                <div class="col-md-12">
+                    <div class="card mb-3 shadow-sm">
+                        <div class="card-body">
+                            <
+                            <p class="card-text"><?= htmlspecialchars($challenge['hint']); ?></p>
+                            <div class="d-flex">
+                                <input type="text" class="form-control answer-input me-2" data-challenge-id="<?= $h['id']; ?>" placeholder="Nhập đáp án">
+                                <button class="btn btn-primary btn-check-answer" data-challenge-id="<?= $h['id']; ?>">Kiểm tra</button>
+                            </div>
+                            <div class="result mt-2 text-success fw-bold" id="result_<?= $h['id']; ?>"></div>
+                        </div>
+                    </div>
+                </div>
+            <?php endforeach; ?>
+        </div>
     </div>
+
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="<?php echo base_url('js/toast.js') ?>"></script>
