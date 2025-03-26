@@ -41,15 +41,15 @@
                 <div class="card-body">
                     <input type="hidden" name="id" value="<?= htmlspecialchars($submission['id']); ?>">
                     <div class="mb-3">
-                        <label for="title" class="form-label fw-bold" readonly>Tên sinh viên</label>
-                        <input type="text" class="form-control" id="title" name="title" value="<?php echo htmlspecialchars($student['full_name'] ?? ''); ?>">
+                        <label for="title" class="form-label fw-bold">Tên sinh viên</label>
+                        <input type="text" class="form-control" id="title" name="title" value="<?php echo htmlspecialchars($student['full_name'] ?? ''); ?>" readonly>
                     </div>
                     <div class="mb-3">
-                        <label for="title" class="form-label fw-bold" readonly>Tên bài tập</label>
-                        <input type="text" class="form-control" id="title" name="title" value="<?php echo htmlspecialchars($assignment['title'] ?? ''); ?>">
+                        <label for="title" class="form-label fw-bold">Tên bài tập</label>
+                        <input type="text" class="form-control" id="title" name="title" value="<?php echo htmlspecialchars($assignment['title'] ?? ''); ?>" readonly>
                     </div>
                     <div class="mb-3">
-                        <label for="description" class="form-label fw-bold" readonly>Mô tả</label>
+                        <label for="description" class="form-label fw-bold">Mô tả</label>
                         <textarea class="form-control" id="description" name="description" rows="4" readonly><?php echo htmlspecialchars($assignment['description'] ?? ''); ?></textarea>
                     </div>
                     <div class="mt-3 text-start">
