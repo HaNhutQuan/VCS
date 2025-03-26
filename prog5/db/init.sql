@@ -44,26 +44,6 @@ CREATE TABLE submissions (
     FOREIGN KEY (assignment_id) REFERENCES assignments(id) ON DELETE CASCADE
 );
 
-CREATE TABLE challenges (
-    id INT PRIMARY KEY AUTO_INCREMENT,
-    teacher_id INT NOT NULL,
-    hint TEXT NOT NULL,
-    file_url VARCHAR(255) NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (teacher_id) REFERENCES users(id) ON DELETE CASCADE
-);
-
-CREATE TABLE challenge_attempts (
-    id INT PRIMARY KEY AUTO_INCREMENT,
-    student_id INT NOT NULL,
-    challenge_id INT NOT NULL,
-    answer VARCHAR(255) NOT NULL,
-    is_correct BOOLEAN DEFAULT FALSE,
-    attempted_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (student_id) REFERENCES users(id) ON DELETE CASCADE,
-    FOREIGN KEY (challenge_id) REFERENCES challenges(id) ON DELETE CASCADE
-);
-
 CREATE TABLE student_assignments (
     id INT PRIMARY KEY AUTO_INCREMENT,
     student_id INT NOT NULL,

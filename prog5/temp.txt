@@ -1,0 +1,45 @@
+<?php
+$names = [
+    "Nguyễn Văn An", "Trần Thị Mai", "Lê Minh Hoàng", "Phạm Thùy Dương", "Hoàng Văn Quang",
+    "Đặng Thu Hằng", "Bùi Công Thành", "Võ Ngọc Ánh", "Ngô Đức Mạnh", "Dương Thị Thanh",
+    "Lý Hải Nam", "Tô Bảo Châu", "Mai Khánh Linh", "Đỗ Văn Hiếu", "Hồ Thị Ngân",
+    "Chu Quốc Hưng", "Tạ Hữu Phước", "Hà Thị Hoa", "Giang Minh Tú", "Thái Bảo Anh",
+    "Cao Văn Sơn", "Châu Mỹ Linh", "Đinh Trọng Nghĩa", "Kiều Hữu Lâm", "Tôn Thị Hạnh",
+    "Lâm Nhật Minh", "Quách Thanh Tùng", "Tống Gia Bảo", "Trịnh Hương Giang", "Huỳnh Thế Vinh",
+    "Từ Quang Huy", "Triệu Ngọc Hân", "Ninh Thị Thảo", "Phùng Hoài Nam", "La Đức Anh",
+    "Lương Văn Bảo", "Phan Thị Kim", "Hà Minh Quân", "Đoàn Ngọc Trinh", "Bạch Công Tuấn",
+    "Nguyễn Thị Hồng", "Đinh Hoàng Long", "Tạ Thị Hương", "Trần Đăng Khoa", "Vũ Bảo Ngọc"
+];
+
+$teachers = array_slice($names, 0, 5);
+$students = array_slice($names, 5);
+
+$password = "123456a@A";
+$default_avatar = "https://res.cloudinary.com/diimgquir/image/upload/v1742971842/default_hqwdg6.jpg";
+
+echo "INSERT INTO users (username, password_hash, full_name, email, phone, avatar_url, role) VALUES\n";
+
+$values = [];
+$teacher_count = 1;
+$student_count = 1;
+
+foreach ($teachers as $name) {
+    $username = "teacher" . $teacher_count++;
+    $email = $username . "@example.com";
+    $password_hash = password_hash($password, PASSWORD_BCRYPT);
+    $phone = "098" . str_pad($teacher_count, 7, "0", STR_PAD_LEFT);
+    
+    $values[] = "('$username', '$password_hash', '$name', '$email', '$phone', '$default_avatar', 'teacher')";
+}
+
+foreach ($students as $name) {
+    $username = "student" . $student_count++;
+    $email = $username . "@example.com";
+    $password_hash = password_hash($password, PASSWORD_BCRYPT);
+    $phone = "098" . str_pad($student_count, 7, "0", STR_PAD_LEFT);
+    
+    $values[] = "('$username', '$password_hash', '$name', '$email', '$phone', '$default_avatar', 'student')";
+}
+
+echo implode(",\n", $values) . ";\n";
+?>
