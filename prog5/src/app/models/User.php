@@ -27,7 +27,7 @@ class User
         $sql = "SELECT * FROM $this->table WHERE id = :id";
 
         $stmt = $this->conn->prepare($sql);
-        $stmt->bindParam(":id", $id);
+        $stmt->bindValue(":id", $id, PDO::PARAM_INT);
         $stmt->execute();
 
         return $stmt->fetch(PDO::FETCH_ASSOC);
@@ -38,7 +38,7 @@ class User
         $sql = "SELECT * FROM $this->table WHERE username = :username";
 
         $stmt = $this->conn->prepare($sql);
-        $stmt->bindParam(":username", $username);
+        $stmt->bindValue(":username", $username, PDO::PARAM_STR);
         $stmt->execute();
 
         return $stmt->fetch(PDO::FETCH_OBJ);
@@ -48,7 +48,7 @@ class User
     {
         $sql = "SELECT * FROM $this->table WHERE role = :role";
         $stmt = $this->conn->prepare($sql);
-        $stmt->bindParam(":role", $role);
+        $stmt->bindValue(":role", $role, PDO::PARAM_STR);
         $stmt->execute();
 
         return $stmt->fetchAll(PDO::FETCH_ASSOC);

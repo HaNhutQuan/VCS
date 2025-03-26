@@ -33,6 +33,8 @@ return [
         "/teacher/updateAssignment" => "TeacherController@updateAssignment",
         "/teacher/createChallenge"  => "TeacherController@createChallenge",
 
-        "/chat/send"                => "ChatController@sendMessage"
+        "/chat/send"                => "ChatController@sendMessage",
+        "/chat/editMessage"         => "ChatController@editMessage",
+        "/chat/deleteMessage"       => "ChatController@deleteMessage"
     ]
 ];
