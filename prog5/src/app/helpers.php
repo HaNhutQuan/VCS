@@ -42,9 +42,7 @@ function validateUploadFile($file, $extraTypes = [])
     if ($file['size'] > $maxSize) {
         return 'Tệp quá lớn (tối đa 5MB).';
     }
-    // 'pdf'  => 'application/pdf',
-    //     'doc'  => 'application/msword',
-    //     'docx' => 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+
 
     $allowedTypes = array_merge([
         'jpg'  => 'image/jpeg',
@@ -52,7 +50,11 @@ function validateUploadFile($file, $extraTypes = [])
         'png'  => 'image/png',
     ], $extraTypes);
 
-    $mimeType = mime_content_type($file['tmp_name']) ?? '';
+
+    $finfo = finfo_open(FILEINFO_MIME_TYPE);
+    $mimeType = finfo_file($finfo, $file['tmp_name']);
+    finfo_close($finfo);
+
     $fileExtension = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
 
 
