@@ -8,6 +8,11 @@ class AuthController
             "title" => "Đăng nhập"
         ];
 
+        if(isset($_SESSION['user'])) {
+            header("Location: " . (($_SESSION['user']['role'] === "teacher" ? "/teacher/home" : "/student/home")));
+            exit();
+        }
+
         return render("login.php", $data);
     }
 
