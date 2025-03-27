@@ -49,7 +49,7 @@ CREATE TABLE student_assignments (
     student_id INT NOT NULL,
     assignment_id INT NOT NULL,
     assigned_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    status ENUM('pending', 'submitted') DEFAULT 'pending',
+    status ENUM('pending', 'submitted', 'teacher_updated') DEFAULT 'pending',
     FOREIGN KEY (student_id) REFERENCES users(id) ON DELETE CASCADE,
     FOREIGN KEY (assignment_id) REFERENCES assignments(id) ON DELETE CASCADE
 );

@@ -66,7 +66,7 @@ class TeacherController
                 exit();
             }
 
-            $secureUrl = uploadFile($_FILES['avatar']['tmp_name']);
+            $secureUrl = uploadFile($_FILES['file']['tmp_name']);
             if (!$secureUrl || $secureUrl === "Upload failed: No URL returned") {
                 $_SESSION['errMessage'] = "Lỗi khi tài liệu lên.";
                 header("Location: /teacher/home");
@@ -75,11 +75,11 @@ class TeacherController
 
             $filteredPost['file_url'] = $secureUrl;
         }
-        // else {
-        //     $_SESSION['errMessage'] = "Thiếu tài liệu đính kèm.";
-        //     header("Location: /teacher/home");
-        //     exit();
-        // }
+        else {
+            $_SESSION['errMessage'] = "Thiếu tài liệu đính kèm.";
+            header("Location: /teacher/home");
+            exit();
+        }
 
         $assignmentModal = new Assignment();
         $assignmentId = $assignmentModal->createAssignmentByTeacherId($filteredPost['teacher_id'], $filteredPost['title'],  $filteredPost['file_url'], $filteredPost['description']);
@@ -143,10 +143,73 @@ class TeacherController
     public function updateAssignment()
     {
         AuthMiddleware::checkAuth("teacher");
+        $allowFields = ['id' => true, 'title' => true, 'description' => true, 'file_url' => true];
 
-        var_dump($_POST);
-        var_dump($_FILES);
-        die();
+        $filteredPost = array_intersect_key($_POST, $allowFields);
+        if (count($filteredPost) !== count($_POST)) {
+            die("Có trường không hợp lệ trong dữ liệu gửi lên.");
+        }
+
+        $assignmentModal = new Assignment();
+        $currAssignment = $assignmentModal->getAssignmentById($filteredPost['id']);
+        $data = [
+            "title"     => 'Thông tin bài tập',
+            "assignment" => $currAssignment
+        ];
+
+        
+        if($currAssignment['file_url'] !== $filteredPost['file_url']) {
+            $_SESSION['errMessage'] = "Đường dẫn tệp cũ không hợp lệ.";
+            
+            return render("teacher/assignment.php", $data);
+        }
+
+        $hasNewFile = true;
+        if (!empty($_FILES['new_file']) && $_FILES['new_file']['error'] === UPLOAD_ERR_OK) {
+            $extraTypes = [
+                'pdf'  => 'application/pdf',
+                'doc'  => 'application/msword',
+                'docx' => 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+            ];
+
+            $result = validateUploadFile($_FILES['new_file'], $extraTypes);
+
+            if ($result !== true) {
+                $_SESSION['errMessage'] = $result;
+                return render("teacher/assignment.php", $data);
+            }
+
+            $secureUrl = uploadFile($_FILES['new_file']['tmp_name']);
+            if (!$secureUrl || $secureUrl === "Upload failed: No URL returned") {
+                $_SESSION['errMessage'] = "Lỗi khi tài liệu lên.";
+                return render("teacher/assignment.php", $data);
+            }
+
+            $filteredPost['file_url'] = $secureUrl;
+            $hasNewFile = true;
+        }
+        else {
+            $filteredPost['file_url'] = $currAssignment['file_url'];
+        }
+
+        $isSuccess = $assignmentModal->updateAssignmentById($filteredPost['id'], $filteredPost['title'], $filteredPost['description'], $filteredPost['file_url']);
+        if(!$isSuccess) {
+            $_SESSION['errMessage'] = "Lỗi trong quá trình cập nhật bài tập.";
+            return render("/teacher/assignment.php", $data);
+        }
+        
+        
+        if($hasNewFile) {
+            $update = $assignmentModal->updateStatusSubmitById($filteredPost['id']);
+            if(!$update) {
+                $_SESSION['errMessage'] = "Cập nhật trạng thái thất bại.";
+                return render("/teacher/assignment.php", $data);
+            }
+        }
+
+        $_SESSION['successMessage'] = "Cập nhật bài tập thành công.";
+        header("Location: /teacher/home");
+        exit();
     }
 
     public function getSubmission()

@@ -33,30 +33,47 @@
     <?php endif; ?>
     <div class="container mt-4">
         <div class="card shadow-lg">
-            
-            <form method="post" enctype="multipart/form-data" action="/updateAssignment">
+
+            <form method="post" enctype="multipart/form-data" action="/teacher/updateAssignment">
                 <div class="card-body">
-                <input type="hidden" name="id" value="<?= htmlspecialchars($assignment['id']); ?>">
+                    <input type="hidden" name="id" value="<?= htmlspecialchars($assignment['id']); ?>">
                     <div class="mb-3">
                         <label for="title" class="form-label fw-bold">Tên bài tập</label>
                         <input type="text" class="form-control" id="title" name="title" value="<?php echo htmlspecialchars($assignment['title'] ?? ''); ?>">
                     </div>
                     <div class="mb-3">
                         <label for="description" class="form-label fw-bold">Mô tả</label>
-                        <textarea class="form-control" id="description" name="description" rows="4" ><?php echo htmlspecialchars($assignment['description'] ?? ''); ?></textarea>
+                        <textarea class="form-control" id="description" name="description" rows="4"><?php echo htmlspecialchars($assignment['description'] ?? ''); ?></textarea>
                     </div>
                     <div class="mt-3 text-start">
                         <?php if (!empty($assignment['file_url'])): ?>
+                            <?php
+                            $file_url = htmlspecialchars($assignment['file_url']);
+                            $file_extension = strtolower(pathinfo($file_url, PATHINFO_EXTENSION));
+                            ?>
+
                             <p class="fw-bold">Tệp hiện tại:</p>
-                            <a href="<?php echo htmlspecialchars($assignment['file_url']); ?>" class="btn btn-down" download>Tải xuống tệp</a>
-                            <input type="hidden" name="file_url" value="<?= htmlspecialchars($assignment['file_url']); ?>">
+                            <!-- Preview Image -->
+                            <?php if (in_array($file_extension, ['jpg', 'jpeg', 'png', 'svg'])): ?>
+                                <img src="<?= $file_url; ?>" alt="Preview" style="max-width: 100%; height: auto; border-radius: 5px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
+                            <?php elseif ($file_extension === 'pdf'): ?>
+                                <!-- Preview PDF -->
+                                <iframe src="<?= $file_url; ?>" width="100%" height="500px" style="border: none;"></iframe>
+                            <?php elseif (in_array($file_extension, ['doc', 'docx'])): ?>
+                                <!-- Preview doc, docx-->
+                                <iframe src="https://docs.google.com/gview?url=<?= urlencode($file_url); ?>&embedded=true" width="100%" height="500px"></iframe>
+                            <?php else: ?>
+                                <p>Không thể preview loại tệp này. <a href="<?= $file_url; ?>" class="btn btn-primary" download>Tải xuống</a></p>
+                            <?php endif; ?>
+
+                            <input type="hidden" name="file_url" value="<?= $file_url; ?>">
                         <?php endif; ?>
                     </div>
+
                     <div class="mt-3">
                         <label for="file" class="form-label fw-bold">Tải lên tệp mới</label>
-                        <input type="file" class="form-control" id="file" name="file">
+                        <input type="file" class="form-control" id="file" name="new_file">
                     </div>
-                    <input type="hidden" name="assignment_id" value="<?php echo htmlspecialchars($assignment['id'] ?? ''); ?>">
                 </div>
                 <div class="card-footer d-flex justify-content-between">
                     <button type="button" class="btn btn-secondary" onclick="history.back()">Quay lại</button>

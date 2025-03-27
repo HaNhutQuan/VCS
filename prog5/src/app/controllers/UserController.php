@@ -43,8 +43,6 @@ class UserController
             exit();
         }
 
-        $message = ["title" => "Thông tin cá nhân",];
-
         $allowedFields = [
             "teacher" => ["username", "password", "full_name", "email", "phone"],
             "student" => ["password", "email", "phone"]
@@ -54,6 +52,12 @@ class UserController
         $formData = array_intersect_key($_POST, $validKeys);
 
         if (!empty($formData["password"])) {
+            if(strlen($formData['password']) < 8) {
+
+                $_SESSION['errMessage'] = "Mật khẩu tối thiểu có 8 ký tự.";
+                header("Location: /profile?id=$userId");
+                exit();
+            }
             $formData["password"] = password_hash($formData["password"], PASSWORD_BCRYPT);
         } else {
             unset($formData["password"]);
@@ -77,7 +81,7 @@ class UserController
 
             $formData['avatar_url'] = $secureUrl;
         }
-        die();
+    
         $userModel = new User();
         $isSuccess = $userModel->updateUserById($userId, $formData);
 

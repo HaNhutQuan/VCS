@@ -37,7 +37,7 @@
     ?>
     <div class="container mt-4">
         <div class="card shadow-lg">
-            <form method="post" enctype="multipart/form-data" action="/teacher/updateAssignment">
+            <form method="post" enctype="multipart/form-data" action="/teacher/updateSubmission">
                 <div class="card-body">
                     <input type="hidden" name="id" value="<?= htmlspecialchars($submission['id']); ?>">
                     <div class="mb-3">

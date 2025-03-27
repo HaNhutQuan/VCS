@@ -72,6 +72,8 @@
                         <td>
                             <?php if ($assignment['status'] === "pending"): ?>
                                 <span class="badge bg-danger">Chưa nộp</span>
+                            <?php elseif ($assignment['status'] === "teacher_updated"): ?>
+                                <span class="badge bg-warning">Vừa cập nhật bài tập</span>
                             <?php else: ?>
                                 <span class="badge bg-success">Đã nộp</span>
                             <?php endif; ?>

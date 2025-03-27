@@ -131,7 +131,7 @@ class Assignment
         }
     }
 
-    function getSubmittedAssignments($teacherId)
+    public function getSubmittedAssignments($teacherId)
     {
 
         $sql = "SELECT 
@@ -155,5 +155,15 @@ class Assignment
         $stmt->execute([':teacher_id' => $teacherId]);
 
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function updateStatusSubmitById($assignmentId)
+    {
+        $sql = "UPDATE student_assignments 
+        SET status = 'teacher_updated' 
+        WHERE assignment_id = :assignment_id";
+
+        $statusStmt = $this->conn->prepare($sql);
+        return $statusStmt->execute([':assignment_id' => $assignmentId]);
     }
 }

@@ -82,24 +82,24 @@ class StudentController
 
             if ($result !== true) {
                 $_SESSION['errMessage'] = $result;
-                header("Location: /teacher/home");
+                header("Location: /student/home");
                 exit();
             }
 
             $secureUrl = uploadFile($_FILES['file']['tmp_name']);
             if (!$secureUrl || $secureUrl === "Upload failed: No URL returned") {
                 $_SESSION['errMessage'] = "Lỗi khi tài liệu lên.";
-                header("Location: /teacher/home");
+                header("Location: /student/home");
                 exit();
             }
 
             $filteredPost['file_url'] = $secureUrl;
         }
-        // else {
-        //     $_SESSION['errMessage'] = "Thiếu tài liệu đính kèm.";
-        //     header("Location: /teacher/home");
-        //     exit();
-        // }
+        else {
+            $_SESSION['errMessage'] = "Thiếu tài liệu đính kèm.";
+            header("Location: /student/home");
+            exit();
+        }
 
         $submissionModal = new Submission();
         $isSuccess = $submissionModal->submitAssignment($_SESSION['user']['id'], $filteredPost['assignment_id'], "");
