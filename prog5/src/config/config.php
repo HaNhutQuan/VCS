@@ -13,6 +13,6 @@ return [
     "cloudinary" => [
         "cloud_name" => "x",
         "api_key"    => "x",
-        "api_secret" => "xxấ"
+        "api_secret" => "x"
     ]
 ];

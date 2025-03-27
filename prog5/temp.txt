@@ -11,6 +11,9 @@ $names = [
     "Nguyễn Thị Hồng", "Đinh Hoàng Long", "Tạ Thị Hương", "Trần Đăng Khoa", "Vũ Bảo Ngọc"
 ];
 
+// Giới hạn danh sách chỉ còn 40 người
+$names = array_slice($names, 0, 40);
+
 $teachers = array_slice($names, 0, 5);
 $students = array_slice($names, 5);
 
