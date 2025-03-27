@@ -95,7 +95,7 @@
         </div>
     </div>
 
-    
+
     <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <form action="/profile" method="POST" class="modal-content" enctype="multipart/form-data">
@@ -137,7 +137,7 @@
     </div>
     <a class="btn btn-primary contact-button" href="/chat?id=<?= $user['id']; ?>">
         <i class="fas fa-comment"></i>
-    </a>                   
+    </a>
     <div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">

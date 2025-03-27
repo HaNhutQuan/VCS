@@ -15,8 +15,8 @@ class Submission
         $this->conn->beginTransaction();
 
         try {
-            
-            $sqlCheck = "SELECT id FROM student_assignments WHERE student_id = :student_id AND assignment_id = :assignment_id";
+            // Kiểm tra xem sinh viên đã nộp bài chưa
+            $sqlCheck = "SELECT id FROM submissions WHERE student_id = :student_id AND assignment_id = :assignment_id";
             $stmtCheck = $this->conn->prepare($sqlCheck);
             $stmtCheck->execute([
                 ':student_id' => $studentId,
@@ -25,30 +25,33 @@ class Submission
             $existingSubmission = $stmtCheck->fetch(PDO::FETCH_ASSOC);
 
             if ($existingSubmission) {
-                
-                $sqlDelete = "DELETE FROM student_assignments WHERE student_id = :student_id AND assignment_id = :assignment_id";
-                $stmtDelete = $this->conn->prepare($sqlDelete);
-                $stmtDelete->execute([
-                    ':student_id' => $studentId,
-                    ':assignment_id' => $assignmentId
+                // Nếu đã nộp trước đó, cập nhật file mới
+                $sqlUpdateSubmission = "UPDATE submissions SET file_url = :file_url, submitted_at = NOW()
+                                    WHERE student_id = :student_id AND assignment_id = :assignment_id";
+                $stmtUpdateSubmission = $this->conn->prepare($sqlUpdateSubmission);
+                $stmtUpdateSubmission->execute([
+                    ':student_id'   => $studentId,
+                    ':assignment_id' => $assignmentId,
+                    ':file_url'     => $file_url
+                ]);
+            } else {
+                // Nếu chưa nộp, chèn bản ghi mới
+                $sqlInsertSubmission = "INSERT INTO submissions (student_id, assignment_id, file_url, submitted_at) 
+                                    VALUES (:student_id, :assignment_id, :file_url, NOW())";
+                $stmtInsertSubmission = $this->conn->prepare($sqlInsertSubmission);
+                $stmtInsertSubmission->execute([
+                    ':student_id'   => $studentId,
+                    ':assignment_id' => $assignmentId,
+                    ':file_url'     => $file_url
                 ]);
             }
 
-            
-            $sqlInsert = "INSERT INTO submissions (student_id, assignment_id, file_url, submitted_at) 
-                      VALUES (:student_id, :assignment_id, :file_url, NOW())";
-            $stmtInsert = $this->conn->prepare($sqlInsert);
-            $stmtInsert->execute([
-                ':student_id'   => $studentId,
-                ':assignment_id' => $assignmentId,
-                ':file_url'     => $file_url
-            ]);
-
-            // Cập nhật lại trạng thái trong student_assignments
-            $sqlUpdate = "INSERT INTO student_assignments (student_id, assignment_id, status, assigned_at)
-                      VALUES (:student_id, :assignment_id, 'submitted', NOW())";
-            $stmtUpdate = $this->conn->prepare($sqlUpdate);
-            $stmtUpdate->execute([
+            // Cập nhật trạng thái trong student_assignments
+            $sqlUpdateStatus = "UPDATE student_assignments 
+                            SET status = 'submitted', assigned_at = NOW() 
+                            WHERE student_id = :student_id AND assignment_id = :assignment_id";
+            $stmtUpdateStatus = $this->conn->prepare($sqlUpdateStatus);
+            $stmtUpdateStatus->execute([
                 ':student_id'   => $studentId,
                 ':assignment_id' => $assignmentId
             ]);
@@ -61,7 +64,8 @@ class Submission
         }
     }
 
-    public function getSubmissionById($id) {
+    public function getSubmissionById($id)
+    {
         $sql = "SELECT * FROM submissions WHERE id = :id";
 
         $stmt = $this->conn->prepare($sql);

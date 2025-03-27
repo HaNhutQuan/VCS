@@ -85,8 +85,8 @@ class StudentController
                 header("Location: /student/home");
                 exit();
             }
-
-            $secureUrl = uploadFile($_FILES['file']['tmp_name']);
+            $fileExtension = strtolower(pathinfo($_FILES['file']['name'], PATHINFO_EXTENSION));
+            $secureUrl = uploadFile($_FILES['file']['tmp_name'], $fileExtension);
             if (!$secureUrl || $secureUrl === "Upload failed: No URL returned") {
                 $_SESSION['errMessage'] = "Lỗi khi tài liệu lên.";
                 header("Location: /student/home");
@@ -102,7 +102,7 @@ class StudentController
         }
 
         $submissionModal = new Submission();
-        $isSuccess = $submissionModal->submitAssignment($_SESSION['user']['id'], $filteredPost['assignment_id'], "");
+        $isSuccess = $submissionModal->submitAssignment($_SESSION['user']['id'], $filteredPost['assignment_id'], $filteredPost['file_url']);
 
         if (!$isSuccess) {
             $_SESSION['errMessage'] = "Nộp bài tập thất bại.";

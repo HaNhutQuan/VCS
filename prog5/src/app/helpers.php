@@ -45,6 +45,7 @@ function validateUploadFile($file, $extraTypes = [])
     // 'pdf'  => 'application/pdf',
     //     'doc'  => 'application/msword',
     //     'docx' => 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+
     $allowedTypes = array_merge([
         'jpg'  => 'image/jpeg',
         'jpeg' => 'image/jpeg',
@@ -65,7 +66,7 @@ function validateUploadFile($file, $extraTypes = [])
 
 
 
-function uploadFile($file)
+function uploadFile($file, $extension)
 {
 
     $config = require base_path("config/config.php");
@@ -84,7 +85,8 @@ function uploadFile($file)
             "resource_type" => "auto",
             "use_filename" => true,
             "unique_filename" => false,
-            "overwrite" => true
+            "overwrite" => true,
+            "format" => $extension,
         ]);
 
         return $upload['secure_url'] ?? "Upload failed: No URL returned";
@@ -94,7 +96,8 @@ function uploadFile($file)
 }
 
 // ChatGPT hân hạnh tài trợ chương trình này :))
-function remove_vietnamese_accent($str) {
+function remove_vietnamese_accent($str)
+{
     $str = preg_replace('/[àáạảãâầấậẩẫăằắặẳẵ]/u', 'a', $str);
     $str = preg_replace('/[èéẹẻẽêềếệểễ]/u', 'e', $str);
     $str = preg_replace('/[ìíịỉĩ]/u', 'i', $str);
@@ -112,7 +115,8 @@ function remove_vietnamese_accent($str) {
     return $str;
 }
 
-function hasStudentAnswered($student_id, $filename) {
+function hasStudentAnswered($student_id, $filename)
+{
     if (!file_exists($filename)) {
         return false;
     }
@@ -122,7 +126,8 @@ function hasStudentAnswered($student_id, $filename) {
     return in_array($student_id, $student_ids);
 }
 
-function normalizeText($text) {
+function normalizeText($text)
+{
     $text = str_replace(["\r\n", "\r", "\n"], " ", $text);
     $text = preg_replace('/\s+/', ' ', $text);
     return trim($text);

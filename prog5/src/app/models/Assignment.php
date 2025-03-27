@@ -161,7 +161,7 @@ class Assignment
     {
         $sql = "UPDATE student_assignments 
         SET status = 'teacher_updated' 
-        WHERE assignment_id = :assignment_id";
+        WHERE assignment_id = :assignment_id AND status = 'submitted'";
 
         $statusStmt = $this->conn->prepare($sql);
         return $statusStmt->execute([':assignment_id' => $assignmentId]);

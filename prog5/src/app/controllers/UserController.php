@@ -58,11 +58,9 @@ class UserController
                 header("Location: /profile?id=$userId");
                 exit();
             }
-            $formData["password"] = password_hash($formData["password"], PASSWORD_BCRYPT);
-        } else {
-            unset($formData["password"]);
-        }
-
+            $formData["password_hash"] = password_hash($formData["password"], PASSWORD_BCRYPT);
+        } 
+        unset($formData["password"]);
         if (!empty($_FILES['avatar']) && $_FILES['avatar']['error'] === UPLOAD_ERR_OK) {
             $result = validateUploadFile($_FILES['avatar']);
 
@@ -71,8 +69,8 @@ class UserController
                 header("Location: /profile?id=$userId");
                 exit();
             }
-
-            $secureUrl = uploadFile($_FILES['avatar']['tmp_name']);
+            $fileExtension = strtolower(pathinfo($_FILES['avatar']['name'], PATHINFO_EXTENSION));
+            $secureUrl = uploadFile($_FILES['avatar']['tmp_name'],$fileExtension);
             if (!$secureUrl || $secureUrl === "Upload failed: No URL returned") {
                 $_SESSION["errMessage"] = "Lỗi khi tải ảnh lên.";
                 header("Location: /profile?id=$userId");

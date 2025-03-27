@@ -51,7 +51,9 @@ class TeacherController
         if (count($filteredPost) !== count($_POST)) {
             die("Có trường không hợp lệ trong dữ liệu gửi lên.");
         }
+       
         if (!empty($_FILES['file']) && $_FILES['file']['error'] === UPLOAD_ERR_OK) {
+            
             $extraTypes = [
                 'pdf'  => 'application/pdf',
                 'doc'  => 'application/msword',
@@ -65,14 +67,13 @@ class TeacherController
                 header("Location: /teacher/home");
                 exit();
             }
-
-            $secureUrl = uploadFile($_FILES['file']['tmp_name']);
+            $fileExtension = strtolower(pathinfo($_FILES['file']['name'], PATHINFO_EXTENSION));
+            $secureUrl = uploadFile($_FILES['file']['tmp_name'], $fileExtension);
             if (!$secureUrl || $secureUrl === "Upload failed: No URL returned") {
                 $_SESSION['errMessage'] = "Lỗi khi tài liệu lên.";
                 header("Location: /teacher/home");
                 exit();
             }
-
             $filteredPost['file_url'] = $secureUrl;
         }
         else {
@@ -178,8 +179,8 @@ class TeacherController
                 $_SESSION['errMessage'] = $result;
                 return render("teacher/assignment.php", $data);
             }
-
-            $secureUrl = uploadFile($_FILES['new_file']['tmp_name']);
+            $fileExtension = strtolower(pathinfo($_FILES['new_file']['name'], PATHINFO_EXTENSION));
+            $secureUrl = uploadFile($_FILES['new_file']['tmp_name'], $fileExtension);
             if (!$secureUrl || $secureUrl === "Upload failed: No URL returned") {
                 $_SESSION['errMessage'] = "Lỗi khi tài liệu lên.";
                 return render("teacher/assignment.php", $data);

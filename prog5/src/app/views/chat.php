@@ -47,9 +47,8 @@
                 <div class="message <?php echo $message['sender_id'] === $user['id'] ? 'received' : 'sent'; ?>"
                     data-message-id="<?= $message['id']; ?>"
                     data-content="<?= $message['content']; ?>"
-                    data-user-id="<?= $_SESSION['user']['id']; ?>"   
-                    data-sender-id="<?= $message['sender_id']; ?>"
-                    >
+                    data-user-id="<?= $_SESSION['user']['id']; ?>"
+                    data-sender-id="<?= $message['sender_id']; ?>">
                     <?= nl2br((htmlspecialchars($message['content']))); ?>
                 </div>
 

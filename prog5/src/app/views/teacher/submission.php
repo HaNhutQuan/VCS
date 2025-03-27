@@ -53,7 +53,7 @@
                         <textarea class="form-control" id="description" name="description" rows="4" readonly><?php echo htmlspecialchars($assignment['description'] ?? ''); ?></textarea>
                     </div>
                     <div class="mt-3 text-start">
-                    <label for="description" class="form-label fw-bold">Bài nộp</label>
+                        <label for="description" class="form-label fw-bold">Bài nộp</label>
                         <div class="text-center">
                             <?php if (in_array($fileExtension, ['jpg', 'jpeg', 'png'])): ?>
                                 <img src="<?= htmlspecialchars($fileUrl) ?>" class="img-fluid rounded shadow-sm" alt="Preview">
