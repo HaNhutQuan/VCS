@@ -50,7 +50,6 @@ function validateUploadFile($file, $extraTypes = [])
         'jpg'  => 'image/jpeg',
         'jpeg' => 'image/jpeg',
         'png'  => 'image/png',
-        'svg'  => 'image/svg+xml'
     ], $extraTypes);
 
     $mimeType = mime_content_type($file['tmp_name']) ?? '';
